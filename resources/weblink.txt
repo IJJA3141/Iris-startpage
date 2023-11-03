@@ -1,0 +1,5 @@
+-- gtk
+https://developer-old.gnome.org/gtkmm-tutorial/stable/sec-buildapp-trivial-app.html.en
+
+-- layers
+https://wayland.app/protocols/wlr-layer-shell-unstable-v1
