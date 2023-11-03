@@ -4,8 +4,8 @@ link_directories(${GTK_LAYER_SHELL_LIBRARY_DIRS})
 include_directories(${GTKMM_INCLUDE_DIRS})
 include_directories(${GTK_LAYER_SHELL_INCLUDE_DIRS})
 
-add_executable(app.out main.cpp gtk/background.cpp gtk/application.cpp
-                       gtk/frame.cpp)
+add_executable(app.out main.cpp gtk/core/background.cpp gtk/core/application.cpp
+                       gtk/frame/frame.cpp)
 
 target_link_libraries(app.out ${GTKMM_LIBRARIES})
 target_link_libraries(app.out ${GTK_LAYER_SHELL_LIBRARIES})

@@ -1,11 +1,10 @@
-#include "glibmm/refptr.h"
-#include "gtkmm/application.h"
-#include "gtkmm/window.h"
+#ifndef APPLICATION
+
 #include <gtkmm.h>
 
+#include "../../macros.hpp"
 #include "background.hpp"
 
-#ifndef APPLICATION
 #define APPLICATION
 
 namespace Up {

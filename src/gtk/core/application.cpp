@@ -1,16 +1,9 @@
-#include "application.hpp"
-#include "background.hpp"
-#include <giomm/application.h>
-#include <glibmm/refptr.h>
-#include <glibmm/ustring.h>
 #include <gtk4-layer-shell.h>
-#include <gtkmm/application.h>
-#include <gtkmm/window.h>
-#include <sigc++/adaptors/bind.h>
-#include <sigc++/functors/mem_fun.h>
+
+#include "application.hpp"
 
 Up::Application::Application()
-    : Gtk::Application("org.gtkmm.application",
+    : Gtk::Application("dev.ijja3141." APP_NAME,
                        Gio::Application::Flags::NONE) {}
 
 Glib::RefPtr<Up::Application> Up::Application::create() {
@@ -23,12 +16,9 @@ Up::Background *Up::Application::create_appwindow() {
   add_window(*win);
 
   gtk_layer_init_for_window(win->gobj());
-
+  gtk_layer_set_namespace(win->gobj(), APP_NAME);
   gtk_layer_set_layer(win->gobj(), GTK_LAYER_SHELL_LAYER_TOP);
-
   gtk_layer_auto_exclusive_zone_enable(win->gobj());
-
-  gtk_window_present(win->gobj());
 
   win->signal_hide().connect(
       sigc::bind(sigc::mem_fun(*this, &Up::Application::on_hide_window), win));

@@ -1,12 +1,10 @@
-#include "frame.hpp"
-#include "gtkmm/box.h"
-#include "gtkmm/button.h"
-#include "gtkmm/grid.h"
-#include "gtkmm/text.h"
+#ifndef BACKGROUND
 
 #include <gtkmm.h>
 
-#ifndef BACKGROUND
+#include "../../macros.hpp"
+#include "../frame/frame.hpp"
+
 #define BACKGROUND
 
 namespace Up {

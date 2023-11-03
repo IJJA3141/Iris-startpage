@@ -12,12 +12,15 @@ Up::Frame::Frame() {
   padding_.set_right(15);
   padding_.set_top(20);
   padding_.set_bottom(2);
+  
+  std::string homedir;
+  if ((homedir = Glib::getenv("HOME")) == "") {
+  }
 
   Glib::RefPtr<Gtk::CssProvider> css_provider = Gtk::CssProvider::create();
-  css_provider->load_from_data("\
- * {background-image: image(cyan);}\
-     button:hover {background-image: image(green);}\
-     button:active {background-image: image(brown);}");
+  css_provider->load_from_path(homedir + "/.config/Up/style.css");
+
+ this->set_name("test"); 
   this->get_style_context()->add_provider(css_provider,
                                           GTK_STYLE_PROVIDER_PRIORITY_USER);
 
