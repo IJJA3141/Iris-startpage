@@ -1,4 +1,3 @@
-#include "gtkmm/image.h"
 #ifndef BACKGROUND
 
 #include <gtkmm.h>
@@ -15,6 +14,7 @@ protected:
   bool fullscreen_;
   Up::Frame frame_;
   Gtk::Image img_;
+  Gtk::Label label_;
 
 public:
   Background(bool _fullscreen, int _width, int _height);
