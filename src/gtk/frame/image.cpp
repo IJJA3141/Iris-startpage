@@ -1,6 +1,6 @@
-#include "frame.hpp"
+#include "image.hpp"
 
-Up::Frame::Frame() {
+Up::Image::Image() {
   this->set_expand(true);
 
   this->padding_.set_left(5); // left right top bottom
@@ -8,18 +8,18 @@ Up::Frame::Frame() {
   padding_.set_top(20);
   padding_.set_bottom(2);
 
-  this->set_name("frame");
- 
+  this->set_name("image");
+
   return;
 }
 
-Up::Frame::~Frame(){};
+Up::Image::~Image(){};
 
-Gtk::SizeRequestMode Up::Frame::get_request_mode_vfunc() const {
+Gtk::SizeRequestMode Up::Image::get_request_mode_vfunc() const {
   return Gtk::Widget::get_request_mode_vfunc();
 }
 
-void Up::Frame::measure_vfunc(Gtk::Orientation _orientation,
+void Up::Image::measure_vfunc(Gtk::Orientation _orientation,
                               int /* _for_size */, int &_min, int &_natural,
                               int &_min_baseline,
                               int &_natural_baseline) const {
@@ -38,25 +38,25 @@ void Up::Frame::measure_vfunc(Gtk::Orientation _orientation,
   return;
 };
 
-void Up::Frame::on_map() {
+void Up::Image::on_map() {
   Gtk::Widget::on_map();
   return;
 }
 
-void Up::Frame::on_unmap() {
+void Up::Image::on_unmap() {
   Gtk::Widget::on_unmap();
   return;
 }
-void Up::Frame::on_realize() {
+void Up::Image::on_realize() {
   Gtk::Widget::on_realize();
   return;
 };
-void Up::Frame::on_unrealize() {
+void Up::Image::on_unrealize() {
   Gtk::Widget::on_unrealize();
   return;
 };
 
-void Up::Frame::snapshot_vfunc(const Glib::RefPtr<Gtk::Snapshot> &snapshot) {
+void Up::Image::snapshot_vfunc(const Glib::RefPtr<Gtk::Snapshot> &snapshot) {
   const Gdk::Rectangle allocation = get_allocation();
   const Gdk::Rectangle rect(0, 0, allocation.get_width(),
                             allocation.get_height());

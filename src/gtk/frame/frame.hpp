@@ -1,10 +1,7 @@
-#include "gdkmm/rgba.h"
-#include "glibmm/refptr.h"
-#include "gtkmm/enums.h"
-#include "gtkmm/snapshot.h"
-#include "gtkmm/widget.h"
-
 #ifndef FRAME
+
+#include <gtkmm.h>
+
 #define FRAME
 
 namespace Up {

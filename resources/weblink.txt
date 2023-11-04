@@ -3,3 +3,6 @@ https://developer-old.gnome.org/gtkmm-tutorial/stable/sec-buildapp-trivial-app.h
 
 -- layers
 https://wayland.app/protocols/wlr-layer-shell-unstable-v1
+
+-- blur
+https://docs.gtk.org/gsk4/class.RenderNode.html
