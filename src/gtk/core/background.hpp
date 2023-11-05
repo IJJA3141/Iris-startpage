@@ -3,23 +3,22 @@
 #include <gtkmm.h>
 
 #include "../../macros.hpp"
-#include "../frame/frame.hpp"
+#include "../widgets/frame.hpp"
 
 #define BACKGROUND
 
-namespace Up {
+namespace Iris {
 
 class Background : public Gtk::Window {
-protected:
-  bool fullscreen_;
-  Up::Frame frame_;
-  Gtk::Image img_;
-  Gtk::Label label_;
+private:
+  Iris::Frame frame_;
 
 public:
-  Background(bool _fullscreen, int _width, int _height);
+  Background();
+
+private:
 };
 
-} // namespace Up
+} // namespace Iris
 
 #endif // !BACKGROUND

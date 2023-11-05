@@ -1,8 +1,10 @@
 #ifndef APPLICATION
 
+#include <fstream>
 #include <gtk4-layer-shell.h>
 #include <gtkmm.h>
 #include <iostream>
+#include <json/json.h>
 #include <string>
 
 #include "../../macros.hpp"
@@ -10,25 +12,28 @@
 
 #define APPLICATION
 
-namespace Up {
+namespace Iris {
 
 class Application : public Gtk::Application {
-protected:
-  Application();
+public:
+  static Json::Value* config;
+  static std::string home;
+
+private:
   Glib::RefPtr<Gtk::CssProvider> css_provider_;
-  std::string home_;
 
 public:
-  static Glib::RefPtr<Application> create();
+  static Glib::RefPtr<Iris::Application> create();
 
 protected:
+  Application();
   void on_activate() override;
 
 private:
-  Up::Background *create_appwindow();
+  Iris::Background *create_appwindow();
   void on_hide_window(Gtk::Window *_window);
 };
 
-} // namespace Up
+} // namespace Iris
 
 #endif // !APPLICATION
