@@ -6,8 +6,9 @@ include_directories(${GTKMM_INCLUDE_DIRS})
 include_directories(${GTK_LAYER_SHELL_INCLUDE_DIRS})
 include_directories(${JSONCPP_INCLUDE_DIRS})
 
-add_executable(app.out main.cpp gtk/core/application.cpp
-                       gtk/core/background.cpp gtk/widgets/frame.cpp)
+add_executable(
+  app.out main.cpp gtk/core/application.cpp gtk/core/background.cpp
+          gtk/widgets/frame.cpp gtk/widgets/module.cpp)
 
 target_link_libraries(app.out ${GTKMM_LIBRARIES})
 target_link_libraries(app.out ${GTK_LAYER_SHELL_LIBRARIES})

@@ -1,0 +1,28 @@
+{
+  "backgroudn": {
+    "height": 0,
+    "width": 0,
+    "fullscreen": true,
+    "layer_top": false
+  },
+  "pages": [
+    {
+      "page0": {
+        "name": "test",
+        "image": "path",
+        "row": [
+          {
+            "name": "row name",
+            "modules": [
+              {
+                "name": "good name",
+                "script": "url",
+                "icon": "path"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

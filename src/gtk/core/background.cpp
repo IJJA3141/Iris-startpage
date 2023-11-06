@@ -1,40 +1,63 @@
 #include "background.hpp"
 #include "application.hpp"
-#include <iostream>
+#include "gtkmm/object.h"
+#include <json/writer.h>
 
 Iris::Background::Background()
     : box_(Gtk::Orientation::HORIZONTAL), rightBox_(),
-      img_("/home/alexe/.config/iris/wallhaven-rrpp6m_2800x1800.png") {
+      img_("/home/alexe/.config/iris/cbg-10.gif") {
   this->set_title(APP_NAME);
   this->set_name("background");
-
-  this->set_margin(0);
 
   this->set_default_size(Iris::Application::config->get("width", 1000).asInt(),
                          Iris::Application::config->get("height", 500).asInt());
 
-  if (Iris::Application::config->get("maximized", true).asBool()) {
-    std::cout << "max" << std::endl;
+  if (Iris::Application::config->get("maximized", true).asBool())
     this->maximize();
-  }
 
   if (Iris::Application::config->get("fullscreen", false).asBool())
     this->fullscreen();
+  /*
+    this->rightBox_.set_name("right");
+    this->box_.set_name("box");
+    this->img_.set_name("img");
 
-  this->rightBox_.set_margin(6);
-  this->rightBox_.set_row_spacing(10);
-  this->rightBox_.set_column_spacing(10);
+    this->img_.set_expand(true);
 
-  this->rightBox_.set_name("right");
-  this->box_.set_name("box");
-  this->img_.set_name("img");
+    this->set_child(this->rightBox_);
 
-  this->img_.set_expand(true);
+    //this->rightBox_.attach(this->img_, 0, 0);
+    this->rightBox_.attach(this->box_, 0, 1);
 
-  this->set_child(this->rightBox_);
+    this->box_.append(this->img_);
+  */
 
-  this->rightBox_.attach(this->img_, 0, 0);
-  this->rightBox_.attach(this->box_, 0, 1);
+  Json::Value modules = *Iris::Application::config;
+  modules = modules["modules"];
+
+  for (int i = 0; i < modules.size(); i++)
+    this->box_.append(*Gtk::manage(
+        new Iris::Module(modules[i].get("name", "---").asString(),
+                         modules[i].get("label", "---").asString(),
+                         modules[i].get("icon", "---").asString(),
+                         modules[i].get("script", "---").asString())));
+
+  this->set_child(this->box_);
+
+  return;
+}
+
+void Iris::Background::debug_config() {
+
+  Json::Value modules = *Iris::Application::config;
+  modules = modules["modules"];
+
+  for (int i = 0; i < modules.size(); i++) {
+    std::cout << "Label: " << modules[i].get("label", "---").asString()
+              << "\nIcon: " << modules[i].get("icon", "---").asString()
+              << "\nScript: " << modules[i].get("script", "---").asString()
+              << std::endl;
+  }
 
   return;
 }
