@@ -1,4 +1,6 @@
 #include "application.hpp"
+#include "gtk4-layer-shell.h"
+#include <iostream>
 
 std::string Iris::Application::home = Glib::getenv("HOME");
 Json::Value *Iris::Application::config = nullptr;
@@ -62,8 +64,12 @@ Iris::Background *Iris::Application::create_appwindow() {
   if (Iris::Application::config->get("layer_top", true).asBool()) {
     gtk_layer_init_for_window(win->gobj());
     gtk_layer_set_namespace(win->gobj(), APP_NAME);
-    gtk_layer_set_layer(win->gobj(), GTK_LAYER_SHELL_LAYER_TOP);
+    gtk_layer_set_margin(
+        win->gobj(), GTK_LAYER_SHELL_EDGE_TOP,
+        Iris::Application::config->get("layer_margin_top", 0).asInt());
     gtk_layer_auto_exclusive_zone_enable(win->gobj());
+
+    gtk_layer_set_layer(win->gobj(), GTK_LAYER_SHELL_LAYER_OVERLAY);
   }
 
   win->signal_hide().connect(sigc::bind(

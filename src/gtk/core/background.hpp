@@ -11,7 +11,9 @@ namespace Iris {
 
 class Background : public Gtk::Window {
 private:
-  Iris::Frame frame_;
+	Gtk::Box box_;
+	Gtk::Grid rightBox_;
+	Gtk::Image img_;
 
 public:
   Background();

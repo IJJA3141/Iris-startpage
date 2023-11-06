@@ -1,5 +1,6 @@
 -- gtk
 https://developer-old.gnome.org/gtkmm-tutorial/stable/sec-buildapp-trivial-app.html.en
+https://stackoverflow.com/questions/41344241/gtkmm-c11-how-to-create-a-custom-composite-widget-out-of-other-widgets
 
 -- layers
 https://wayland.app/protocols/wlr-layer-shell-unstable-v1
