@@ -7,27 +7,22 @@
 #define GIF
 
 namespace Iris {
-class Pane : public Gtk::Widget {
-public:
-  static Cairo::RefPtr<Cairo::Context> cr_;
-  static Glib::RefPtr<Gdk::PixbufAnimationIter> buff_;
-
+class Pane : public Gtk::DrawingArea {
 private:
-  Gtk::Border padding_;
+  Glib::RefPtr<Gdk::PixbufAnimationIter> iter_;
   std::string label_;
 
 public:
   Pane(std::string _label, std::string _image_path);
+  virtual ~Pane();
 
 protected:
-  void snapshot_vfunc(const Glib::RefPtr<Gtk::Snapshot> &_snapshot) override;
-  void measure_vfunc(Gtk::Orientation _orientation, int _for_size,
-                     int &_minimum, int &_natural, int &_minimum_baseline,
-                     int &_natural_baseline) const override;
-  void on_realize() override;
+  bool on_timeout();
+  void on_draw(const Cairo::RefPtr<Cairo::Context> &_cr, int _width,
+               int _height);
 
-private:
-  static bool draw_image();
+  double m_radius;
+  double m_line_width;
 };
 } // namespace Iris
 

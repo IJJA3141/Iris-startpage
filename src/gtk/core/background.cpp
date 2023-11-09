@@ -1,9 +1,11 @@
 #include "background.hpp"
 #include "application.hpp"
+#include "gdkmm/pixbufanimation.h"
 
 Iris::Background::Background()
     : box_(Gtk::Orientation::VERTICAL), rightBox_(),
-      img_("/home/alexe/.config/iris/cbg-10.gif"), gif_("label", "/home/alexe/.config/iris/cbg-10.gif") {
+      img_("/home/alexe/.config/iris/cbg-10.gif"),
+      gif_("label", "/home/alexe/.config/iris/cbg-10.gif") {
   this->set_title(APP_NAME);
   this->set_name("background");
 
