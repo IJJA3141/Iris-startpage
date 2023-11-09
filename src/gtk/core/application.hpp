@@ -16,7 +16,7 @@ namespace Iris {
 
 class Application : public Gtk::Application {
 public:
-  static Json::Value* config;
+  static Json::Value *config;
   static std::string home;
 
 private:

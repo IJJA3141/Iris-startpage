@@ -6,8 +6,9 @@
 #include <vector>
 
 #include "../../macros.hpp"
-#include "../widgets/frame.hpp"
 #include "../widgets/module.hpp"
+#include "../widgets/row.hpp"
+#include "../widgets/gif.hpp"
 
 #define BACKGROUND
 
@@ -18,6 +19,7 @@ private:
   Gtk::Box box_;
   Gtk::Grid rightBox_;
   Gtk::Image img_;
+  Iris::Pane gif_;
 
 public:
   Background();

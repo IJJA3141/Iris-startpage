@@ -36,9 +36,7 @@ Iris::Module::Module(std::string _name, std::string _label,
 
   this->signal_clicked().connect(sigc::mem_fun(*this, &Iris::Module::callback));
 
-  this->debug_css();
-
-  std::cout << "image path: " + _img_path << std::endl;
+  //this->debug_css();
 
   return;
 }

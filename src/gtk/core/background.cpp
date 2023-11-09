@@ -1,11 +1,9 @@
 #include "background.hpp"
 #include "application.hpp"
-#include "gtkmm/object.h"
-#include <json/writer.h>
 
 Iris::Background::Background()
-    : box_(Gtk::Orientation::HORIZONTAL), rightBox_(),
-      img_("/home/alexe/.config/iris/cbg-10.gif") {
+    : box_(Gtk::Orientation::VERTICAL), rightBox_(),
+      img_("/home/alexe/.config/iris/cbg-10.gif"), gif_("label", "/home/alexe/.config/iris/cbg-10.gif") {
   this->set_title(APP_NAME);
   this->set_name("background");
 
@@ -17,30 +15,16 @@ Iris::Background::Background()
 
   if (Iris::Application::config->get("fullscreen", false).asBool())
     this->fullscreen();
-  /*
-    this->rightBox_.set_name("right");
-    this->box_.set_name("box");
-    this->img_.set_name("img");
 
-    this->img_.set_expand(true);
+  Json::Value rows = *Iris::Application::config;
+  rows = rows["rows"];
 
-    this->set_child(this->rightBox_);
+  for (int i = 1000; i < rows.size(); i++)
+    this->box_.append(
+        *Gtk::manage(new Iris::Row(i, rows[i].get("name", "---").asString(),
+                                   rows[i].get("label", "---").asString())));
 
-    //this->rightBox_.attach(this->img_, 0, 0);
-    this->rightBox_.attach(this->box_, 0, 1);
-
-    this->box_.append(this->img_);
-  */
-
-  Json::Value modules = *Iris::Application::config;
-  modules = modules["modules"];
-
-  for (int i = 0; i < modules.size(); i++)
-    this->box_.append(*Gtk::manage(
-        new Iris::Module(modules[i].get("name", "---").asString(),
-                         modules[i].get("label", "---").asString(),
-                         modules[i].get("icon", "---").asString(),
-                         modules[i].get("script", "---").asString())));
+  this->box_.append(this->gif_);
 
   this->set_child(this->box_);
 

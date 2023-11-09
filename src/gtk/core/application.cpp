@@ -1,6 +1,4 @@
 #include "application.hpp"
-#include "gtk4-layer-shell.h"
-#include <iostream>
 
 std::string Iris::Application::home = Glib::getenv("HOME");
 Json::Value *Iris::Application::config = nullptr;
