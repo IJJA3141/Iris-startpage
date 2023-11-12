@@ -1,15 +1,17 @@
 #ifndef MODULE
 
+#include <algorithm>
 #include <gtkmm.h>
 #include <iostream>
 #include <string>
-#include <algorithm>
 
 #define MODULE
 
-namespace Iris {
+namespace Iris
+{
 
-class Module : public Gtk::Button {
+class Module : public Gtk::Button
+{
 private:
   Gtk::Label label_;
   Gtk::Image img_;
@@ -17,11 +19,11 @@ private:
   std::string script_;
 
 public:
-  Module(std::string _name, std::string _label, std::string _img_path, std::string _script_path);
+  Module (std::string _name, std::string _label, std::string _img_path, std::string _script_path);
 
 protected:
-  void callback();
-  void debug_css();
+  void callback ();
+  void debug_css ();
 };
 }; // namespace Iris
 
