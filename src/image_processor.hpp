@@ -20,7 +20,8 @@ private:
 public:
   ImageProcessor (int _radius);
 
-  void blur (Cairo::Surface *_cs, Gdk::Rectangle _rect);
+  void blur (Cairo::Surface* _source, Gdk::Rectangle _rect);
+  void test (Gdk::Rectangle _rect);
 };
 }
 
