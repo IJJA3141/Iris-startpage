@@ -11,7 +11,6 @@ add_executable(
   main.cpp
   gtk/core/application.cpp
   gtk/core/background.cpp
-  pixwrap.cpp
   image_processor.cpp
   gtk/widgets/module.cpp
   gtk/widgets/row.cpp

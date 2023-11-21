@@ -2,10 +2,10 @@
 #include "gdkmm/pixbuf.h"
 #include "glibmm/refptr.h"
 
-#include "../../pixwrap.hpp"
 #include <cstdlib>
 
-Iris::Pane::Pane(std::string _name, std::string _label, std::string _image_path) : label_(_label)
+Iris::Pane::Pane(std::string _name, std::string _label, std::string _image_path)
+    : label_(_label), pr(5)
 {
   this->set_name(_name);
 
@@ -33,30 +33,20 @@ void access_pixel(Glib::RefPtr<Gdk::Pixbuf> imageptr, int x, int y)
 
   int offset = y * imageptr->get_rowstride() + x * imageptr->get_n_channels();
   guchar *pixel = &imageptr->get_pixels()[offset]; // get pixel pointer
-  std::cout << (int)pixel[0] << std::endl;   // conditionally modify the green channel
+  std::cout << (int)pixel[0] << std::endl;         // conditionally modify the green channel
 
-  pixel[0] = (guchar) 255;
-  pixel[1] = (guchar) 0;
-  pixel[2] = (guchar) 0;
+  pixel[0] = (guchar)255;
+  pixel[1] = (guchar)0;
+  pixel[2] = (guchar)0;
 }
 
 void Iris::Pane::on_draw(const Cairo::RefPtr<Cairo::Context> &_cr, int _width, int _height)
 {
-  Gdk::Pixbuf::create_subpixbuf(this->iter_->get_pixbuf(), 0, 0, 100, 200);
-
   Gdk::Cairo::set_source_pixbuf(_cr, this->iter_->get_pixbuf(), 100, 80);
   _cr->rectangle(110, 90, this->iter_->get_pixbuf()->get_width() - 20,
                  this->iter_->get_pixbuf()->get_height() - 20);
 
-  guint8 *a = this->iter_->get_pixbuf()->get_pixels();
-  int b = this->iter_->get_pixbuf()->get_rowstride();
-  std::cout << b << "!!!" << std::endl;
-  /*
-    Iris::Pixwrap k(this->iter_->get_pixbuf());
-    k.debug();
-  */
-
-  access_pixel(this->iter_->get_pixbuf(), 1, 1);
+  //this->pr.blur(this->iter_->get_pixbuf(), {0, 0, 100, 100});
 
   //_cr->fill ();
   _cr->paint();

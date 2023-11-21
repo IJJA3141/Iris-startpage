@@ -1,28 +1,31 @@
 #ifndef IMAGE_PROCESSOR
+#define IMAGE_PROCESSOR
 
 #include "cairomm/surface.h"
+#include "gdkmm/pixbuf.h"
 #include "gdkmm/rectangle.h"
+#include "glibmm/refptr.h"
 #include <cmath>
 #include <iostream>
 #include <vector>
-
-#define IMAGE_PROCESSOR
 
 namespace Iris
 {
 class ImageProcessor
 {
 private:
+  std::vector<std::vector<float>> kernel_;
   int kernel_size_;
-  std::vector<std::vector<float> > kernel_;
   float sum_;
+  float r_;
+  float g_;
+  float b_;
 
 public:
-  ImageProcessor (int _radius);
+  ImageProcessor(int _radius);
 
-  void blur (Cairo::Surface* _source, Gdk::Rectangle _rect);
-  void test (Gdk::Rectangle _rect);
+  void blur(Glib::RefPtr<Gdk::Pixbuf> _pPixbuf, Gdk::Rectangle _rect);
 };
-}
+} // namespace Iris
 
 #endif // !IMAGE_PROCESSOR
