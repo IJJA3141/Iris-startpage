@@ -1,16 +1,12 @@
 #ifndef IMAGE_PROCESSOR
 #define IMAGE_PROCESSOR
 
-#include "cairomm/surface.h"
-#include "gdkmm/pixbuf.h"
-#include "gdkmm/rectangle.h"
-#include "glibmm/refptr.h"
-#include <cmath>
-#include <iostream>
+#include <gtkmm.h>
 #include <vector>
 
 namespace Iris
 {
+
 class ImageProcessor
 {
 private:

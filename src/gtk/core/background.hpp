@@ -1,35 +1,38 @@
-#ifndef BACKGROUND
+#ifndef BG
+#define BG
 
 #include <gtkmm.h>
-#include <iostream>
-#include <json/json.h>
 #include <vector>
 
-#include "../../macros.hpp"
-#include "../widgets/gif.hpp"
-#include "../widgets/module.hpp"
-#include "../widgets/row.hpp"
-
-#define BACKGROUND
+#include "../../util/macros.hpp"
+#include "../widgets/frame.hpp"
 
 namespace Iris
 {
 
+struct Page {
+  Glib::RefPtr<Gdk::PixbufAnimationIter> iter;
+  Gtk::Widget widget;
+};
+
 class Background : public Gtk::Window
 {
 private:
+  std::vector<Iris::Page> pages_;
+  Iris::Frame frame_;
+  Gtk::Stack stack_;
   Gtk::Box box_;
-  Gtk::Grid rightBox_;
-  Gtk::Image img_;
-  Iris::Pane gif_;
+  int index_;
 
 public:
-  Background ();
+  Background();
+  void set_page(int _index);
 
-private:
-  void debug_config ();
+public:
+  void operator++();
+  void operator--();
 };
 
 } // namespace Iris
 
-#endif // !BACKGROUND
+#endif // !BG
