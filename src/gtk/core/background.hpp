@@ -13,6 +13,8 @@ namespace Iris
 struct Page {
   Glib::RefPtr<Gdk::PixbufAnimationIter> iter;
   Gtk::Widget widget;
+
+  Page(std::string _name, std::string _label, std::string _path);
 };
 
 class Background : public Gtk::Window

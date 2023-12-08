@@ -6,8 +6,6 @@ Iris::Background::Background() : box_(Gtk::Orientation::VERTICAL), frame_("", nu
   this->set_title(APP_NAME);
   this->set_name("background");
 
-
-
   this->set_default_size(Iris::Application::config->get("width", 1000).asInt(),
                          Iris::Application::config->get("height", 500).asInt());
 
