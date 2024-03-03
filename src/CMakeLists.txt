@@ -8,6 +8,7 @@ add_executable(
   iris.out 
   main.cpp
   ./ui/window.cpp
+  ./ui/page.cpp
   )
 
 target_link_libraries(iris.out ${GTKMM_LIBRARIES})

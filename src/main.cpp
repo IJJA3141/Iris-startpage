@@ -1,7 +1,6 @@
 #include "./ui/window.hpp"
 
 #include <gtkmm.h>
-#include <iostream>
 
 int main(int _argc, char *_argv[])
 {
