@@ -7,6 +7,7 @@ include_directories(${GTK_LAYER_SHELL_INCLUDE_DIRS})
 add_executable(
   iris.out 
   main.cpp
+  xdg.cpp
   ./ui/window.cpp
   ./ui/page.cpp
   )

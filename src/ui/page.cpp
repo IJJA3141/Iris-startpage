@@ -1,20 +1,31 @@
 #include "page.hpp"
 
-#include <iostream>
-
 #include "../EXAMPLE_CONFIG.hpp"
 #include "gtkmm/enums.h"
+#include "gtkmm/label.h"
+#include <string>
 
-Iris::Page::Page()
-    : image_(IMAGE_PATH), box_(Gtk::Orientation::HORIZONTAL),
-      lg_("jfjjjfjjfjfjfjfjffffffffdskafkdsajf;")
+Iris::Page::Page() : picture_(_IRIS_EXAMPLE_CONFIG_IMAGE_PATH), box_(Gtk::Orientation::VERTICAL)
 {
-  this->image_.set_name("stack");
+  // css class asignation
+  this->picture_.set_name("test");
   this->box_.set_name("box");
-  this->box_.append(this->lg_);
 
-  this->image_.set_parent(*this);
+  // parenting
+  this->picture_.set_parent(*this);
   this->box_.set_parent(*this);
+
+  this->box_.append(this->entry_);
+  this->box_.append(this->scrolledWindo_);
+
+  auto a = new Gtk::Box(Gtk::Orientation::VERTICAL);
+  this->scrolledWindo_.set_child(*a);
+
+  for (int i = 0; i < 500; i++)
+    a->append(*new Gtk::Label(std::to_string(i)));
+
+  // settings
+  this->scrolledWindo_.set_expand(true);
 
   return;
 }
@@ -23,31 +34,30 @@ void Iris::Page::measure_vfunc(Gtk::Orientation _orientation, int _for_size, int
                                int &_natural, int &_minimum_baseline, int &_natural_baseline) const
 {
   _minimum_baseline = -1;
-  _minimum = WIDTH;
-  _natural = WIDTH;
+  _natural = 0;
+  _minimum = 0;
 
   return;
 }
 
 void Iris::Page::size_allocate_vfunc(int _width, int _height, int _baseline)
 {
-  Gtk::Allocation child_allocation_one;
-  Gtk::Allocation child_allocation_two;
+  Gtk::Allocation box, pic;
 
-  child_allocation_one.set_x(0);
-  child_allocation_one.set_y(0);
+  pic.set_x(0);
+  pic.set_width(_IRIS_EXAMPLE_CONFIG_IMAGE_WIDTH);
 
-  child_allocation_one.set_height(_height);
-  child_allocation_one.set_width(_width - 1200);
+  pic.set_y(0);
+  pic.set_height(_height);
 
-  child_allocation_two.set_y(0);
-  child_allocation_two.set_x(_width - 1200);
+  box.set_x(_IRIS_EXAMPLE_CONFIG_IMAGE_WIDTH);
+  box.set_width(_width - _IRIS_EXAMPLE_CONFIG_IMAGE_WIDTH);
 
-  child_allocation_two.set_width(1200);
-  child_allocation_two.set_height(_height);
+  box.set_y(0);
+  box.set_height(_height);
 
-  this->box_.size_allocate(child_allocation_two, _baseline);
-  this->image_.size_allocate(child_allocation_one, _baseline);
+  this->picture_.size_allocate(pic, _baseline);
+  this->box_.size_allocate(box, _baseline);
 
   return;
 }
