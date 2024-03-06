@@ -1,30 +1,27 @@
 #ifndef _IRIS_SEARCH
 #define _IRIS_SEARCH
 
+#include "../xdg.hpp"
+
 #include <gtkmm.h>
+#include <string>
+#include <utility>
+#include <vector>
 
 namespace Iris
 {
+
 class Search : public Gtk::Widget
 {
 private:
-  class TreeModelColums_ : public Gtk::TreeModel::ColumnRecord
-  {
-  public:
-    TreeModelColums_();
-    Gtk::TreeModelColumn<Glib::ustring> columnText;
-    Gtk::TreeModelColumn<int> columnNumber;
-  };
-
-private:
   Gtk::Entry entry_;
   Gtk::Label label_;
+  Gtk::ScrolledWindow scrolledWindow_;
+  Gtk::Box box_;
+  std::vector<Gtk::Label *> vPLabel_;
 
-  Iris::Search::TreeModelColums_ treeModel_;
-  Glib::RefPtr<Gtk::ListStore> pListStore_;
-  Gtk::TreeView treeView_;
-
-  Glib::RefPtr<Gtk::EntryCompletion> entryCompletion_;
+  int index_;
+  std::vector<std::pair<std::string, std::string>> vPair_;
 
 public:
   Search();
@@ -33,8 +30,9 @@ public:
                      int &_minimum_baseline, int &_natural_baseline) const override;
   void size_allocate_vfunc(int _width, int _height, int _baseline) override;
   Gtk::SizeRequestMode get_request_mode_vfunc() const override;
-};
 
+private:
+};
 } // namespace Iris
 
 #endif // !_IRIS_SEARCH

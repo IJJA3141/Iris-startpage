@@ -6,15 +6,10 @@
 
 namespace Iris
 {
-namespace xdg
+namespace Xdg
 {
-struct DesktopApplication {
-  std::string name;
-  std::string commandline;
-};
-
-std::vector<Iris::xdg::DesktopApplication> fetch();
-}; // namespace xdg
+std::vector<std::pair<std::string, std::string>> fetch();
+}; // namespace Xdg
 }; // namespace Iris
 
 #endif // !_IRIS_XDG

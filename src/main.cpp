@@ -1,9 +1,6 @@
 #include "./ui/window.hpp"
-#include "xdg.hpp"
 
 #include <gtkmm.h>
-#include <iostream>
-#include <vector>
 
 int main(int _argc, char *_argv[])
 {

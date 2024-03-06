@@ -1,6 +1,9 @@
 #include "page.hpp"
 
 #include "../EXAMPLE_CONFIG.hpp"
+#include "gtkmm/enums.h"
+#include "gtkmm/label.h"
+#include <string>
 
 Iris::Page::Page() : picture_(_IRIS_EXAMPLE_CONFIG_IMAGE_PATH), search_()
 {
@@ -10,6 +13,8 @@ Iris::Page::Page() : picture_(_IRIS_EXAMPLE_CONFIG_IMAGE_PATH), search_()
   // parenting
   this->picture_.set_parent(*this);
   this->search_.set_parent(*this);
+
+  // settings
 
   return;
 }
@@ -26,7 +31,7 @@ void Iris::Page::measure_vfunc(Gtk::Orientation _orientation, int _for_size, int
 
 void Iris::Page::size_allocate_vfunc(int _width, int _height, int _baseline)
 {
-  Gtk::Allocation search, pic;
+  Gtk::Allocation pic, search;
 
   pic.set_x(0);
   pic.set_width(_IRIS_EXAMPLE_CONFIG_IMAGE_WIDTH);
