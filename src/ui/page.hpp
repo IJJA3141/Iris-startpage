@@ -1,7 +1,8 @@
 #ifndef _IRIS_PAGE
 #define _IRIS_PAGE
 
-#include "gtkmm/scrolledwindow.h"
+#include "search.hpp"
+
 #include <gtkmm.h>
 
 namespace Iris
@@ -11,8 +12,7 @@ class Page : public Gtk::Widget
 private:
   Gtk::Picture picture_;
   Gtk::Box box_;
-  Gtk::Entry entry_;
-  Gtk::ScrolledWindow scrolledWindo_;
+  Iris::Search search_;
 
 public:
   Page();

@@ -10,6 +10,7 @@ add_executable(
   xdg.cpp
   ./ui/window.cpp
   ./ui/page.cpp
+  ./ui/search.cpp
   )
 
 target_link_libraries(iris.out ${GTKMM_LIBRARIES})
