@@ -1,7 +1,5 @@
 #include "search.hpp"
-#include "gtkmm/enums.h"
-#include "gtkmm/label.h"
-#include <iostream>
+
 #include <string>
 #include <utility>
 
@@ -17,9 +15,13 @@ Iris::Search::Search()
   for (const std::pair<std::string, std::string> entry : this->vPair_) {
     this->vPLabel_.push_back(new Gtk::Label(entry.first));
     this->box_.append(*(this->vPLabel_[this->vPLabel_.size() - 1]));
+    this->box_.get_last_child()->set_name("one");
   }
 
   // css asignation
+  this->box_.get_first_child()->set_name("two");
+  this->label_.set_name("lab");
+  this->entry_.set_name("ent");
 
   // parenting
   this->entry_.set_parent(*this);
@@ -27,6 +29,9 @@ Iris::Search::Search()
   this->scrolledWindow_.set_parent(*this);
 
   this->scrolledWindow_.set_child(this->box_);
+
+  // settings
+  this->scrolledWindow_.set_focusable(false);
 
   return;
 }
@@ -50,7 +55,7 @@ void Iris::Search::size_allocate_vfunc(int _width, int _height, int _baseline)
 
   this->entry_.measure(Gtk::Orientation::HORIZONTAL, _width, minEntry, nat, minBaseline,
                        natBaseline);
-  this->entry_.measure(Gtk::Orientation::VERTICAL, minEntry, minLabel, nat, minBaseline,
+  this->label_.measure(Gtk::Orientation::HORIZONTAL, minEntry, minLabel, nat, minBaseline,
                        natBaseline);
 
   entry.set_x(0);

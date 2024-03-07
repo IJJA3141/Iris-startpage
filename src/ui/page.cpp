@@ -1,14 +1,12 @@
 #include "page.hpp"
 
 #include "../EXAMPLE_CONFIG.hpp"
-#include "gtkmm/enums.h"
-#include "gtkmm/label.h"
-#include <string>
 
 Iris::Page::Page() : picture_(_IRIS_EXAMPLE_CONFIG_IMAGE_PATH), search_()
 {
   // css class asignation
-  this->picture_.set_name("test");
+  this->picture_.set_name("pic");
+  this->search_.set_name("search");
 
   // parenting
   this->picture_.set_parent(*this);
