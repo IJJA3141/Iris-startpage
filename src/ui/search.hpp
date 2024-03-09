@@ -1,7 +1,10 @@
 #ifndef _IRIS_SEARCH
 #define _IRIS_SEARCH
 
-#include "../xdg.hpp"
+#include "glibmm/ustring.h"
+#include "gtkmm/adjustment.h"
+#include "gtkmm/eventcontrollerkey.h"
+#include "gtkmm/label.h"
 
 #include <gtkmm.h>
 #include <string>
@@ -14,14 +17,24 @@ namespace Iris
 class Search : public Gtk::Widget
 {
 private:
+  struct Entry {
+    std::string name;
+    std::string command;
+    Gtk::Label *pLable;
+
+    Entry(Gtk::Box *_parent, std::pair<std::string, std::string> _pair);
+  };
+
+private:
   Gtk::Entry entry_;
   Gtk::Label label_;
   Gtk::ScrolledWindow scrolledWindow_;
   Gtk::Box box_;
-  std::vector<Gtk::Label *> vPLabel_;
-
+  std::vector<Iris::Search::Entry> vEntry_;
   int index_;
-  std::vector<std::pair<std::string, std::string>> vPair_;
+
+  Glib::RefPtr<Gtk::Adjustment> adjustment_;
+  int labelCount_;
 
 public:
   Search();
@@ -30,6 +43,12 @@ public:
                      int &_minimum_baseline, int &_natural_baseline) const override;
   void size_allocate_vfunc(int _width, int _height, int _baseline) override;
   Gtk::SizeRequestMode get_request_mode_vfunc() const override;
+
+private:
+  bool on_key_down(guint _keyval, guint _keycode, Gdk::ModifierType _state);
+  void handle_tab();
+  void handle_shift_tab();
+  void handle_text();
 
 private:
 };

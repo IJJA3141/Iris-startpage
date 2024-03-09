@@ -11,6 +11,9 @@ Iris::Window::Window() : stack_(), pg()
   this->stack_.set_visible_child(this->pg);
   this->set_child(this->stack_);
 
+  this->set_focusable(false);
+  this->stack_.set_focusable(false);
+
   return;
 }
 

@@ -13,7 +13,6 @@ class Window : public Gtk::Window
 private:
   Iris::Page pg;
   Gtk::Stack stack_;
-  Gtk::CenterBox box;
 
   // std::vector<Iris::Page *> vPPage_;
 

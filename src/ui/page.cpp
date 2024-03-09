@@ -13,6 +13,8 @@ Iris::Page::Page() : picture_(_IRIS_EXAMPLE_CONFIG_IMAGE_PATH), search_()
   this->search_.set_parent(*this);
 
   // settings
+  this->set_focusable(false);
+  this->picture_.set_focusable(false);
 
   return;
 }
