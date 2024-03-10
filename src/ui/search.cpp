@@ -7,14 +7,15 @@
 #include "gtkmm/label.h"
 #include "sigc++/functors/mem_fun.h"
 
+#include <cctype>
+#include <cstdlib>
 #include <iostream>
 #include <string>
 #include <utility>
 
 Iris::Search::Entry::Entry(Gtk::Box *_parent, std::pair<std::string, std::string> _pair)
+    : name(_pair.first), command(_pair.second)
 {
-  this->name = _pair.first;
-  this->command = _pair.second;
   this->pLable = new Gtk::Label(_pair.first);
   this->pLable->set_name(CSS_INACTIVE_LABEL);
   _parent->append(*this->pLable);
@@ -50,6 +51,7 @@ Iris::Search::Search()
   this->label_.set_focusable(false);
   this->scrolledWindow_.set_focusable(false);
   this->entry_.set_placeholder_text("App filter...");
+  this->entry_.set_activates_default(false);
 
   // events
   Glib::RefPtr<Gtk::EventControllerKey> pKeyController = Gtk::EventControllerKey::create();
@@ -123,6 +125,10 @@ bool Iris::Search::on_key_down(guint _keyval, guint _keycode, Gdk::ModifierType 
     this->handle_shift_tab();
   else if (_keyval == GDK_KEY_Tab)
     this->handle_tab();
+  else if (_keyval == GDK_KEY_Return)
+    this->handle_enter();
+
+  std::cout << gdk_keyval_name(_keyval) << std::endl;
 
   return true;
 };
@@ -171,16 +177,57 @@ void Iris::Search::handle_shift_tab()
   return;
 }
 
+void Iris::Search::find(std::string _compared, std::string _comparing, Gtk::Label *_pLable)
+{
+  int size = _compared.size();
+  std::string lowerCompared;
+  bool out = false;
+  int it = 0;
+
+  if (_compared.size() < _comparing.size()) goto end;
+  if (_comparing.size() == 0) {
+    out = true;
+    goto end;
+  }
+
+  for (const char c : _comparing)
+    lowerCompared += std::tolower(c);
+
+  _comparing = lowerCompared;
+  lowerCompared.clear();
+
+  for (const char c : _compared)
+    lowerCompared += std::tolower(c);
+
+  for (int i = 0; i < size - _comparing.size() + 1; i++) {
+    if (lowerCompared.substr(i, _comparing.size()) == _comparing) {
+
+      _compared.insert((6 + _comparing.size()) * it + i + _comparing.size(), "</b>");
+      _compared.insert((6 + _comparing.size()) * it + i, "<b>");
+      it++;
+
+      out = true;
+    };
+  }
+
+end:
+  if (out) {
+    _pLable->set_visible(true);
+    _pLable->set_markup_with_mnemonic(_compared);
+    this->labelCount_++;
+  } else
+    _pLable->set_visible(false);
+
+  return;
+}
+
 void Iris::Search::handle_text()
 {
   this->labelCount_ = 0;
 
   for (Iris::Search::Entry _ : this->vEntry_) {
-    if (_.name.find(this->entry_.get_text()) == 0) {
-      _.pLable->set_visible(true);
-      this->labelCount_++;
-    } else
-      _.pLable->set_visible(false);
+    _.pLable->set_text(_.name);
+    this->find(_.name, this->entry_.get_text(), _.pLable);
   }
 
   if (!this->vEntry_[this->index_].pLable->get_visible()) {
@@ -199,3 +246,11 @@ void Iris::Search::handle_text()
 
   return;
 }
+
+void Iris::Search::handle_enter()
+{
+  std::string str = this->vEntry_[this->index_].command;
+  system((str.erase(str.find(" ")) + " &").c_str());
+
+  return;
+};

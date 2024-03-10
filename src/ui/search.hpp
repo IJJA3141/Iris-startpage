@@ -18,8 +18,8 @@ class Search : public Gtk::Widget
 {
 private:
   struct Entry {
-    std::string name;
-    std::string command;
+    const std::string name;
+    const std::string command;
     Gtk::Label *pLable;
 
     Entry(Gtk::Box *_parent, std::pair<std::string, std::string> _pair);
@@ -49,6 +49,8 @@ private:
   void handle_tab();
   void handle_shift_tab();
   void handle_text();
+  void find(std::string _compared, std::string _comparing, Gtk::Label *_pLabel);
+  void handle_enter();
 
 private:
 };
