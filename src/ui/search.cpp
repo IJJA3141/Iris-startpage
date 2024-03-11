@@ -38,29 +38,29 @@ Iris::Search::Search()
 
   // css asignation
   this->box_.get_first_child()->set_name(CSS_ACTIVE_LABEL);
-  this->label_.set_name("lab");
-  this->entry_.set_name("ent");
+  this->label_.set_name("entry_count");
+  this->entry_.set_name("entry");
 
   // parenting
   this->entry_.set_parent(*this);
   this->label_.set_parent(*this);
   this->scrolledWindow_.set_parent(*this);
   this->scrolledWindow_.set_child(this->box_);
+
   // settings
   this->set_focusable(false);
   this->label_.set_focusable(false);
   this->scrolledWindow_.set_focusable(false);
   this->entry_.set_placeholder_text("App filter...");
-  this->entry_.set_activates_default(false);
+  this->entry_.grab_focus();
 
   // events
   Glib::RefPtr<Gtk::EventControllerKey> pKeyController = Gtk::EventControllerKey::create();
   pKeyController->signal_key_pressed().connect(sigc::mem_fun(*this, &Iris::Search::on_key_down),
                                                false);
-  const Glib::ustring a = "";
   this->add_controller(pKeyController);
-  this->entry_.grab_focus();
 
+  this->entry_.signal_activate().connect(sigc::mem_fun(*this, &Iris::Search::handle_enter));
   this->entry_.property_text().signal_changed().connect(
       sigc::mem_fun(*this, &Iris::Search::handle_text));
 
@@ -125,8 +125,6 @@ bool Iris::Search::on_key_down(guint _keyval, guint _keycode, Gdk::ModifierType 
     this->handle_shift_tab();
   else if (_keyval == GDK_KEY_Tab)
     this->handle_tab();
-  else if (_keyval == GDK_KEY_Return)
-    this->handle_enter();
 
   std::cout << gdk_keyval_name(_keyval) << std::endl;
 
@@ -244,11 +242,20 @@ void Iris::Search::handle_text()
   this->adjustment_->set_value(this->adjustment_->get_page_size() * this->index_ /
                                this->labelCount_);
 
+  if (this->labelCount_ < 10)
+    this->label_.set_text(" " + std::to_string(this->labelCount_) + "/" +
+                          std::to_string(this->vEntry_.size()));
+  else
+    this->label_.set_text(std::to_string(this->labelCount_) + "/" +
+                          std::to_string(this->vEntry_.size()));
+
   return;
 }
 
 void Iris::Search::handle_enter()
 {
+  std::cout << "?" << std::endl;
+
   std::string str = this->vEntry_[this->index_].command;
   system((str.erase(str.find(" ")) + " &").c_str());
 

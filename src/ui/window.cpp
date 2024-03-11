@@ -5,6 +5,8 @@ Iris::Window::Window() : stack_(), pg()
 {
   this->set_title("Iris");
 
+  this->set_name("background");
+
   this->stack_.set_name("stack");
   this->stack_.add(this->pg);
 
