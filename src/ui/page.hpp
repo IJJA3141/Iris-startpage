@@ -2,6 +2,7 @@
 #define _IRIS_PAGE
 
 #include "gtkmm/scrolledwindow.h"
+#include "gtkmm/stack.h"
 #include "search.hpp"
 #include <gtkmm.h>
 
@@ -10,6 +11,7 @@ namespace Iris
 class Page : public Gtk::Widget
 {
 private:
+  Gtk::Stack stack_;
   Gtk::Picture picture_;
   Iris::Search search_;
 

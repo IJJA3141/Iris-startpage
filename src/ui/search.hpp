@@ -3,6 +3,7 @@
 
 #include "glibmm/ustring.h"
 #include "gtkmm/adjustment.h"
+#include "gtkmm/button.h"
 #include "gtkmm/eventcontrollerkey.h"
 #include "gtkmm/label.h"
 
@@ -32,6 +33,8 @@ private:
   Gtk::Box box_;
   std::vector<Iris::Search::Entry> vEntry_;
   int index_;
+
+  Gtk::Button bt;
 
   Glib::RefPtr<Gtk::Adjustment> adjustment_;
   int labelCount_;

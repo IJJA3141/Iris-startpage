@@ -9,7 +9,6 @@
 
 #include <cctype>
 #include <cstdlib>
-#include <iostream>
 #include <string>
 #include <utility>
 
@@ -24,7 +23,8 @@ Iris::Search::Entry::Entry(Gtk::Box *_parent, std::pair<std::string, std::string
 }
 
 Iris::Search::Search()
-    : vEntry_(), box_(Gtk::Orientation::VERTICAL), index_(0), scrolledWindow_(), labelCount_(0)
+    : vEntry_(), box_(Gtk::Orientation::VERTICAL), index_(0), scrolledWindow_(), labelCount_(0),
+      bt("test")
 {
   // initialization
   for (std::pair<std::string, std::string> _ : Iris::Xdg::fetch())
@@ -48,11 +48,7 @@ Iris::Search::Search()
   this->scrolledWindow_.set_child(this->box_);
 
   // settings
-  this->set_focusable(false);
-  this->label_.set_focusable(false);
-  this->scrolledWindow_.set_focusable(false);
   this->entry_.set_placeholder_text("App filter...");
-  this->entry_.grab_focus();
 
   // events
   Glib::RefPtr<Gtk::EventControllerKey> pKeyController = Gtk::EventControllerKey::create();
@@ -63,6 +59,8 @@ Iris::Search::Search()
   this->entry_.signal_activate().connect(sigc::mem_fun(*this, &Iris::Search::handle_enter));
   this->entry_.property_text().signal_changed().connect(
       sigc::mem_fun(*this, &Iris::Search::handle_text));
+
+  this->bt.set_parent(*this);
 
   return;
 }
@@ -108,6 +106,15 @@ void Iris::Search::size_allocate_vfunc(int _width, int _height, int _baseline)
   this->label_.size_allocate(label, _baseline);
   this->scrolledWindow_.size_allocate(scrolled, _baseline);
 
+  Gtk::Allocation b;
+
+  b.set_x(10);
+  b.set_y(10);
+  b.set_height(200);
+  b.set_width(200);
+
+  this->bt.size_allocate(b, _baseline);
+
   return;
 }
 
@@ -126,9 +133,7 @@ bool Iris::Search::on_key_down(guint _keyval, guint _keycode, Gdk::ModifierType 
   else if (_keyval == GDK_KEY_Tab)
     this->handle_tab();
 
-  std::cout << gdk_keyval_name(_keyval) << std::endl;
-
-  return true;
+  return false;
 };
 
 void Iris::Search::handle_tab()
@@ -254,9 +259,10 @@ void Iris::Search::handle_text()
 
 void Iris::Search::handle_enter()
 {
-  std::cout << "?" << std::endl;
+  this->bt.grab_focus();
 
   std::string str = this->vEntry_[this->index_].command;
+  if (str.find(" ") >= str.size()) return;
   system((str.erase(str.find(" ")) + " &").c_str());
 
   return;

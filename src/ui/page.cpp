@@ -1,8 +1,10 @@
 #include "page.hpp"
 
 #include "../EXAMPLE_CONFIG.hpp"
+#include "gtkmm/enums.h"
 
-Iris::Page::Page() : picture_(_IRIS_EXAMPLE_CONFIG_IMAGE_PATH), search_()
+Iris::Page::Page()
+    : picture_(_IRIS_EXAMPLE_CONFIG_IMAGE_PATH), search_(), stack_()
 {
   // css class asignation
   this->picture_.set_name("pic");
@@ -13,8 +15,6 @@ Iris::Page::Page() : picture_(_IRIS_EXAMPLE_CONFIG_IMAGE_PATH), search_()
   this->search_.set_parent(*this);
 
   // settings
-  this->set_focusable(false);
-  this->picture_.set_focusable(false);
 
   return;
 }
