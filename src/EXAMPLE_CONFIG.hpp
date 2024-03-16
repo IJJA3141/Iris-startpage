@@ -7,9 +7,23 @@
 
 #define _IRIS_EXAMPLE_CONFIG_IMAGE_WIDTH 200
 
-#define _IRIS_EXAMPLE_CONFIG_WIDTH 1500 
+#define _IRIS_EXAMPLE_CONFIG_WIDTH 1500
 #define _IRIS_EXAMPLE_CONFIG_HEIGHT 400
 
 #define _IRIS_EXAMPLE_CONFIG_USE_LOCAL true
+
+#define _IRIS_EXAMPLE_CONFIG_SHORTCUTS                                                             \
+  {                                                                                                \
+    {"/home/alexe/Downloads/test.png", "label", "cmd"},                                            \
+        {"/home/alexe/Downloads/test.png", "label", "cmd"},                                        \
+        {"/home/alexe/Downloads/test.png", "label", "cmd"},                                        \
+        {"/home/alexe/Downloads/test.png", "label", "cmd"},                                        \
+        {"/home/alexe/Downloads/test.png", "label", "cmd"},                                        \
+        {"/home/alexe/Downloads/test.png", "label", "cmd"},                                        \
+        {"/home/alexe/Downloads/test.png", "label", "cmd"},                                        \
+    {                                                                                              \
+      "/home/alexe/Downloads/test.png", "label", "cmd"                                             \
+    }                                                                                              \
+  }
 
 #endif // !_IRIS_EXAMPLE_CONFIG

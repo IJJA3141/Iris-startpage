@@ -12,7 +12,6 @@ class Window : public Gtk::Window
 {
 private:
   Iris::Page pg;
-  Iris::Page pg2;
   Gtk::Stack stack_;
 
   // std::vector<Iris::Page *> vPPage_;
@@ -21,7 +20,6 @@ public:
   Window();
 
   void size_allocate_vfunc(int _width, int _height, int _baseline) override;
-  bool on_key_down(guint _keyval, guint _keycode, Gdk::ModifierType _state);
 };
 } // namespace Iris
 

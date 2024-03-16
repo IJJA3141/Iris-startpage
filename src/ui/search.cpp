@@ -9,6 +9,7 @@
 
 #include <cctype>
 #include <cstdlib>
+#include <iostream>
 #include <string>
 #include <utility>
 
@@ -132,6 +133,8 @@ bool Iris::Search::on_key_down(guint _keyval, guint _keycode, Gdk::ModifierType 
     this->handle_shift_tab();
   else if (_keyval == GDK_KEY_Tab)
     this->handle_tab();
+  else if (_keyval == GDK_KEY_Escape)
+    std::cout << "?" << std::endl;
 
   return false;
 };

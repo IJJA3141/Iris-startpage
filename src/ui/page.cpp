@@ -3,16 +3,13 @@
 #include "../EXAMPLE_CONFIG.hpp"
 #include "gtkmm/enums.h"
 
-Iris::Page::Page()
-    : picture_(_IRIS_EXAMPLE_CONFIG_IMAGE_PATH), search_(), stack_()
+Iris::Page::Page() : picture_(_IRIS_EXAMPLE_CONFIG_IMAGE_PATH)
 {
   // css class asignation
   this->picture_.set_name("pic");
-  this->search_.set_name("search");
 
   // parenting
   this->picture_.set_parent(*this);
-  this->search_.set_parent(*this);
 
   // settings
 

@@ -1,19 +1,27 @@
 #ifndef _IRIS_PAGE
 #define _IRIS_PAGE
 
-#include "gtkmm/scrolledwindow.h"
-#include "gtkmm/stack.h"
-#include "search.hpp"
+#include "gtkmm/box.h"
+#include "gtkmm/label.h"
 #include <gtkmm.h>
+#include <vector>
 
 namespace Iris
 {
 class Page : public Gtk::Widget
 {
 private:
-  Gtk::Stack stack_;
+  struct Row {
+    Gtk::Box box;
+    std::vector<Gtk::Button *> vPButton_;
+
+    Row(std::vector<std::pair<std::string,std::string>> _vPStrStr);
+  };
+
+private:
+  Gtk::Label title_;
   Gtk::Picture picture_;
-  Iris::Search search_;
+  std::vector<Iris::Page::Row *> vPRow_;
 
 public:
   Page();
