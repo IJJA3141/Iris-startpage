@@ -1,11 +1,12 @@
-#include "xdg.hpp"
+#include "config.hpp"
+
+// temp
 #include "EXAMPLE_CONFIG.hpp"
 
 #include <filesystem>
 #include <fstream>
-#include <utility>
 
-std::vector<std::pair<std::string, std::string>> Iris::Xdg::fetch()
+std::vector<std::pair<std::string, std::string>> Iris::xdg::fetch()
 {
   std::filesystem::path path = "/usr/share/applications/";
   std::string local = "Name[" + std::locale("").name().erase(2) + "]=";
