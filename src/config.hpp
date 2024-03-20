@@ -15,29 +15,55 @@ namespace xdg // fetch the xdg application
 std::vector<std::pair<std::string, std::string>> fetch();
 };
 
+struct Page {
+};
+
 // Singleton for config
 //
 // read values
 // call functions
 class Config
 {
+public:
+  struct Button {
+    std::string name;
+    std::string image;
+    int page_index;
+    int index;
+  };
+
+  struct Page {
+    std::string name;
+    std::string image;
+    std::vector<Iris::Config::Button> aVButton[3];
+  };
+
 private:
   static Iris::Config *pConfig_;
   lua_State *L_;
 
 public:
+  float width;
+  float height;
+  float image_width;
+  bool use_local;
+
+  std::vector<Iris::Config::Page> vPage;
+
+public:
   static Iris::Config *get_config();
 
-  bool get_bool_value(const std::string _name);
-  void get_table_value(const std::string _name);
-  float get_float_value(const std::string _name);
-  std::string get_string_value(const std::string _name);
-
-  void call_function(const std::string _name);
+  void call_function(int _page_index, int _index);
 
 private:
   Config();
   ~Config();
+
+  bool get_bool(std::string _name);
+  float get_float(std::string _name);
+  std::string get_string(std::string _name);
+
+  void debug_stack();
 
 public:
   Config(Iris::Config &_other) = delete;

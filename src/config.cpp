@@ -15,7 +15,7 @@ Iris::Config *Iris::Config::get_config()
   return Iris::Config::pConfig_;
 }
 
-Iris::Config::Config()
+Iris::Config::Config() : vPage()
 {
   this->L_ = luaL_newstate();
   luaL_openlibs(this->L_);
@@ -24,6 +24,25 @@ Iris::Config::Config()
 
   if (err != LUA_OK) {
     std::cout << lua_tostring(this->L_, -1) << std::endl;
+    exit(1);
+  }
+
+  this->debug_stack();
+
+  lua_getglobal(this->L_, "Config");
+
+  this->debug_stack();
+
+  exit(1);
+
+  this->width = this->get_float("width");
+  this->height = this->get_float("height");
+  this->image_width = this->get_float("image_width");
+  this->use_local = this->get_bool("use_local");
+
+  lua_getglobal(this->L_, "pages");
+  if (!lua_istable(this->L_, -1)) {
+    std::cout << "pages must be a table" << std::endl;
     exit(1);
   }
 
@@ -36,6 +55,75 @@ Iris::Config::~Config()
   return;
 }
 
+bool Iris::Config::get_bool(std::string _name)
+{
+  lua_getglobal(this->L_, _name.c_str());
+  if (!lua_isboolean(this->L_, -1)) {
+    std::cout << _name << " must be a boolean" << std::endl;
+    exit(1);
+  }
+
+  this->debug_stack();
+
+  return lua_toboolean(this->L_, -1);
+};
+
+float Iris::Config::get_float(std::string _name)
+{
+  lua_getglobal(this->L_, _name.c_str());
+  if (!lua_isnumber(this->L_, -1)) {
+    std::cout << _name << " must be a number" << std::endl;
+    exit(1);
+  }
+
+  this->debug_stack();
+
+  return lua_tonumber(this->L_, -1);
+};
+
+std::string Iris::Config::get_string(std::string _name)
+{
+  lua_getglobal(this->L_, _name.c_str());
+  if (!lua_isstring(this->L_, -1)) {
+    std::cout << _name << " must be a string" << std::endl;
+    exit(1);
+  }
+
+  this->debug_stack();
+
+  return lua_tostring(this->L_, -1);
+};
+
+void Iris::Config::debug_stack()
+{
+  std::string str = "lua stack from top to bottom: ->\n";
+
+  for (int i = lua_gettop(this->L_); i > 0; i--) {
+    switch (lua_type(this->L_, i)) {
+    case LUA_TTABLE:
+      str += "{ }\n";
+      break;
+    case LUA_TBOOLEAN:
+      str += "bool\n";
+      break;
+    case LUA_TSTRING:
+      str += "str\n";
+      break;
+    case LUA_TNUMBER:
+      str += "an\n";
+      break;
+    dedefault:
+      str += "?\n";
+      break;
+    }
+  }
+
+  std::cout << str << std::endl;
+
+  return;
+}
+
+/*
 bool Iris::Config::get_bool_value(const std::string _name)
 {
   lua_getglobal(this->L_, _name.c_str());
@@ -74,4 +162,4 @@ void Iris::Config::call_function(const std::string _name)
   std::cout << "function error " << lua_tostring(this->L_, -1) << std::endl;
 
   return;
-}
+}*/
