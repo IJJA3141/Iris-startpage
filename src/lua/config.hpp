@@ -1,5 +1,7 @@
 #ifndef _IRIS_CONFIG_LOADER
 
+#include "debugger.hpp"
+
 #include <string>
 #include <utility>
 #include <vector>
@@ -41,6 +43,7 @@ public:
 private:
   static Iris::Config *pConfig_;
   lua_State *L_;
+  Iris::Debugger deb_;
 
 public:
   float width;
@@ -62,8 +65,6 @@ private:
   bool get_bool(std::string _name);
   float get_float(std::string _name);
   std::string get_string(std::string _name);
-
-  void debug_stack();
 
 public:
   Config(Iris::Config &_other) = delete;

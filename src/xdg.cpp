@@ -1,4 +1,4 @@
-#include "config.hpp"
+#include "lua/config.hpp"
 
 // temp
 #include "EXAMPLE_CONFIG.hpp"

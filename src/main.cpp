@@ -1,7 +1,6 @@
 // #include "./ui/window.hpp"
 
-#include "config.hpp"
-#include <iostream>
+#include "lua/config.hpp"
 
 int main(int _argc, char *_argv[])
 {

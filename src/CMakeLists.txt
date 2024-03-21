@@ -10,7 +10,8 @@ add_executable(
   iris.out 
   main.cpp
   xdg.cpp
-  config.cpp
+  ./lua/config.cpp
+  ./lua/debugger.cpp
   #./ui/window.cpp
   #./ui/page.cpp
   #./ui/search.cpp
