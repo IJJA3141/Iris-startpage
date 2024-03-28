@@ -14,7 +14,7 @@ int main(int _argc, char *_argv[])
 
 
    return app->make_window_and_run<Iris::Window>(_argc, _argv);*/
-  Iris::Config *p = Iris::Config::get_config();
+  Iris::ConfigRetriever *p = Iris::ConfigRetriever::get_config_retriver();
 
   return 0;
 }

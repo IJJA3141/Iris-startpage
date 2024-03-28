@@ -6,12 +6,20 @@ Iris::Debugger::Debugger(lua_State *_L) : L_(_L) { return; };
 void Iris::Debugger::set_stack(lua_State *_L)
 {
   this->L_ = _L;
+
   return;
 };
 
-void Iris::Debugger::print_stack()
+void Iris::Debugger::print_stack(int _r)
 {
-  this->str_ = "";
+  if (this->L_ == nullptr) {
+    std::cout << "debugger wasn't initialized !" << std::endl;
+    exit(1);
+  }
+
+  this->r_ = 0;
+  this->str_ = "-- Stack from top to bottom\n";
+  this->max_r_ = _r;
 
   int n = lua_gettop(this->L_);
 
@@ -26,6 +34,7 @@ void Iris::Debugger::print_stack()
     this->str_ += " ";
 
     this->print_item(i, false);
+    this->str_ += "\n";
   }
 
   this->print();
@@ -37,13 +46,11 @@ void Iris::Debugger::print_item(int _index, bool _as_key)
 {
   int type = lua_type(this->L_, _index);
 
-  //if (_as_key) this->str_ += "[";
-
   switch (type) {
   case LUA_TNIL:
-    this->str_ += '"';
+    if (!_as_key) this->str_ += '"';
     this->str_ += "nil";
-    this->str_ += '"';
+    if (!_as_key) this->str_ += '"';
     break;
 
   case LUA_TNUMBER:
@@ -58,29 +65,35 @@ void Iris::Debugger::print_item(int _index, bool _as_key)
     break;
 
   case LUA_TSTRING:
-    this->str_ += '"';
+    if (!_as_key) this->str_ += '"';
     this->str_ += lua_tostring(this->L_, _index);
-    this->str_ += '"';
+    if (!_as_key) this->str_ += '"';
     break;
 
   case LUA_TTABLE:
-    this->print_table(_index);
+    if (this->max_r_ == -1) {
+      this->print_table(_index);
+      break;
+    };
+
+    if (this->max_r_ > this->r_) {
+      this->print_table(_index);
+    } else
+      this->str_ += "\"{...}\"";
     break;
 
   case LUA_TFUNCTION:
-    this->str_ += '"';
+    if (!_as_key) this->str_ += '"';
     this->str_ += "function()";
-    this->str_ += '"';
+    if (!_as_key) this->str_ += '"';
     break;
 
   default:
-    this->str_ += '"';
+    if (!_as_key) this->str_ += '"';
     std::cout << "???" << std::endl;
-    this->str_ += '"';
+    if (!_as_key) this->str_ += '"';
     break;
   }
-
-  //if (_as_key) this->str_ += "]";
 
   return;
 };
@@ -89,6 +102,7 @@ void Iris::Debugger::print_table(int _index)
 {
   if (_index < 0) _index = lua_gettop(this->L_);
 
+  this->r_++;
   const char *pre = "{";
 
   if (this->is_seq(_index))
@@ -101,7 +115,7 @@ void Iris::Debugger::print_table(int _index)
 
       this->print_item(-2, true);
 
-      this->str_ += " : ";
+      this->str_ += " = ";
       this->print_item(-1, false);
 
       lua_pop(this->L_, 1);
@@ -110,6 +124,7 @@ void Iris::Debugger::print_table(int _index)
     }
 
     this->str_ += "}";
+    this->r_--;
   }
 
   return;

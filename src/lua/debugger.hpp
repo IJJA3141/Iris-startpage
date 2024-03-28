@@ -14,12 +14,14 @@ class Debugger
 private:
   lua_State *L_;
   std::string str_;
+  int r_;
+  int max_r_;
 
 public:
   Debugger(lua_State *_L = nullptr);
 
   void set_stack(lua_State *_L);
-  void print_stack();
+  void print_stack(int _r = -1);
 
 private:
   void print_item(int _index, bool _as_key);
