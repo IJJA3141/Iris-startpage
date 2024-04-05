@@ -12,9 +12,9 @@ add_executable(
   xdg.cpp
   ./lua/config.cpp
   ./lua/debugger.cpp
-  #./ui/window.cpp
-  #./ui/page.cpp
-  #./ui/search.cpp
+  ./ui/window.cpp
+  ./ui/page.cpp
+  ./ui/search.cpp
   )
 
 target_link_libraries(iris.out ${LUA_LIBRARIES})

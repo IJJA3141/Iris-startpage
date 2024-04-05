@@ -32,10 +32,10 @@ Iris::ConfigRetriever::ConfigRetriever()
   this->deb_.set_stack(this->L_);
   lua_getglobal(this->L_, "Config");
 
-  this->config_.image_width = this->get_float("image_width");
-  this->config_.width = this->get_float("width");
-  this->config_.height = this->get_float("height");
-  this->config_.use_local = this->get_bool("use_local");
+  this->config.image_width = this->get_float("image_width");
+  this->config.width = this->get_float("width");
+  this->config.height = this->get_float("height");
+  this->config.use_local = this->get_bool("use_local");
 
   lua_pushstring(this->L_, "pages");
   lua_gettable(this->L_, 1);
@@ -60,87 +60,43 @@ Iris::ConfigRetriever::ConfigRetriever()
     lua_pushstring(this->L_, "top_button");
     lua_gettable(this->L_, 2);
 
-    if (!lua_istable(this->L_, -1)) {
-      std::cout << "config error !\ntop_button must be a table\nAborting..." << std::endl;
-      exit(1);
-    }
+    page.aRow[0].title = this->get_string("title", 3, true);
 
-    size_t buttonTableSize = lua_rawlen(this->L_, 1);
-    for (int j = 1; j <= buttonTableSize; j++) {
-      Iris::Config::Button button;
+    lua_pushstring(this->L_, "buttons");
+    lua_gettable(this->L_, 3);
 
-      lua_rawgeti(this->L_, 1, j);
-
-      button.image = this->get_string("image", 4);
-      std::cout << "-- j:" << j << " i:" << i << std::endl;
-      this->deb_.print_stack();
-      button.name = this->get_string("label", 4);
-      button.index = j;
-      button.page_index = i;
-
-      page.aVButton[0].push_back(button);
-
-      lua_remove(this->L_, -1);
-    }
+    page.aRow[0].vButton = this->iterate_table();
+    lua_remove(this->L_, -1);
     lua_remove(this->L_, -1);
 
     lua_pushstring(this->L_, "center_button");
     lua_gettable(this->L_, 2);
 
-    if (!lua_istable(this->L_, -1)) {
-      std::cout << "config error !\ntop_button must be a table\nAborting..." << std::endl;
-      exit(1);
-    }
+    page.aRow[1].title = this->get_string("title", 3, true);
 
-    buttonTableSize = lua_rawlen(this->L_, 1);
-    for (int j = 1; j <= buttonTableSize; j++) {
-      Iris::Config::Button button;
+    lua_pushstring(this->L_, "buttons");
+    lua_gettable(this->L_, 3);
 
-      lua_rawgeti(this->L_, 1, j);
-
-      button.image = this->get_string("image", 4);
-      button.name = this->get_string("label", 4);
-      button.index = j;
-      button.page_index = i;
-
-      page.aVButton[0].push_back(button);
-
-      lua_remove(this->L_, -1);
-    }
+    page.aRow[1].vButton = this->iterate_table();
     lua_remove(this->L_, -1);
 
     lua_pushstring(this->L_, "bottom_button");
     lua_gettable(this->L_, 2);
 
-    if (!lua_istable(this->L_, -1)) {
-      std::cout << "config error !\ntop_button must be a table\nAborting..." << std::endl;
-      exit(1);
-    }
+    page.aRow[2].title = this->get_string("title", 3, true);
 
-    buttonTableSize = lua_rawlen(this->L_, 1);
-    for (int j = 1; j <= buttonTableSize; j++) {
-      Iris::Config::Button button;
+    lua_pushstring(this->L_, "buttons");
+    lua_gettable(this->L_, 3);
 
-      lua_rawgeti(this->L_, 1, j);
-
-      button.image = this->get_string("image", 4);
-      button.name = this->get_string("label", 4);
-      button.index = j;
-      button.page_index = i;
-
-      page.aVButton[0].push_back(button);
-
-      lua_remove(this->L_, -1);
-    }
+    page.aRow[2].vButton = this->iterate_table();
     lua_remove(this->L_, -1);
 
+    this->config.vPage.push_back(page);
     lua_remove(this->L_, -1);
   }
 
   return;
 }
-
-Iris::Config *Iris::ConfigRetriever::get_config() { return &this->config_; };
 
 Iris::ConfigRetriever::~ConfigRetriever()
 {
@@ -182,14 +138,21 @@ float Iris::ConfigRetriever::get_float(std::string _name, int _tableIndexe)
   return r;
 }
 
-std::string Iris::ConfigRetriever::get_string(std::string _name, int _tableIndexe)
+std::string Iris::ConfigRetriever::get_string(std::string _name, int _tableIndexe,
+                                              bool _handle_error)
 {
   lua_pushstring(this->L_, _name.c_str());
   lua_gettable(this->L_, _tableIndexe);
 
   if (!lua_isstring(this->L_, -1)) {
-    std::cout << "config error !\n" << _name << " must be a string\nAborting..." << std::endl;
-    exit(1);
+    if (!_handle_error) {
+      std::cout << "config error !\n" << _name << " must be a string\nAborting..." << std::endl;
+      exit(1);
+    }
+
+    std::string r = "";
+    lua_remove(this->L_, -1);
+    return r;
   }
 
   std::string r = lua_tostring(this->L_, -1);
@@ -198,3 +161,35 @@ std::string Iris::ConfigRetriever::get_string(std::string _name, int _tableIndex
 
   return r;
 }
+
+std::vector<Iris::Config::Button> Iris::ConfigRetriever::iterate_table()
+{
+  std::vector<Iris::Config::Button> r = {};
+
+  this->deb_.print_stack();
+  int tableSize = lua_rawlen(this->L_, -1);
+  std::cout << tableSize << std::endl;
+  for (int i = 1; i <= tableSize; i++) {
+    std::cout << "????????" << std::endl;
+    Iris::Config::Button button;
+
+    lua_rawgeti(this->L_, 1, i);
+
+    button.name = this->get_string("label", 1);
+    button.image = this->get_string("image", 1);
+
+    r.push_back(button);
+    lua_remove(this->L_, -1);
+  }
+
+  return r;
+}
+
+void Iris::Config::Button::func()
+{
+  Iris::ConfigRetriever::get_config_retriver()->call_function(this->pageIndex, this->row,
+                                                              this->buttonIndex);
+  return;
+}
+
+void Iris::ConfigRetriever::call_function(int _page_index, int _row, int _index) { return; }

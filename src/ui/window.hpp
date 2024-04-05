@@ -1,7 +1,10 @@
 #ifndef _IRIS_WINDOW
 #define _IRIS_WINDOW
 
+#include "gtkmm/label.h"
+#include "gtkmm/picture.h"
 #include "page.hpp"
+#include "../lua/config.hpp"
 
 #include <gtkmm.h>
 #include <vector>
@@ -11,10 +14,9 @@ namespace Iris
 class Window : public Gtk::Window
 {
 private:
-  Iris::Page pg;
+  std::vector<Iris::Page *> vPPage_;
   Gtk::Stack stack_;
-
-  // std::vector<Iris::Page *> vPPage_;
+  Gtk::Picture test;
 
 public:
   Window();

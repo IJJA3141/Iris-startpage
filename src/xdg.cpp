@@ -1,8 +1,5 @@
 #include "lua/config.hpp"
 
-// temp
-#include "EXAMPLE_CONFIG.hpp"
-
 #include <filesystem>
 #include <fstream>
 
@@ -36,7 +33,8 @@ std::vector<std::pair<std::string, std::string>> Iris::xdg::fetch()
           local_name = buffer.substr(local.size());
       }
 
-      if (local_name != "" && _IRIS_EXAMPLE_CONFIG_USE_LOCAL) app.first = local_name;
+      if (local_name != "" && Iris::ConfigRetriever::get_config_retriver()->config.use_local)
+        app.first = local_name;
       vPairStrStr.push_back(app);
     }
   abort:

@@ -1,6 +1,6 @@
 #include "search.hpp"
 #include "../css.hpp"
-#include "../xdg.hpp"
+#include "../lua/config.hpp"
 #include "gdk/gdkkeysyms.h"
 #include "gdkmm/enums.h"
 #include "gtkmm/eventcontrollerfocus.h"
@@ -28,7 +28,7 @@ Iris::Search::Search()
       bt("test")
 {
   // initialization
-  for (std::pair<std::string, std::string> _ : Iris::Xdg::fetch())
+  for (std::pair<std::string, std::string> _ : Iris::xdg::fetch())
     this->vEntry_.push_back(Iris::Search::Entry(&this->box_, _));
 
   this->labelCount_ = this->vEntry_.size();

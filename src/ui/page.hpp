@@ -3,6 +3,7 @@
 
 #include "gtkmm/box.h"
 #include "gtkmm/label.h"
+
 #include <gtkmm.h>
 #include <vector>
 
@@ -12,19 +13,19 @@ class Page : public Gtk::Widget
 {
 private:
   struct Row {
+    Gtk::Label title;
     Gtk::Box box;
-    std::vector<Gtk::Button *> vPButton_;
-
-    Row(std::vector<std::pair<std::string,std::string>> _vPStrStr);
+    std::vector<Gtk::Button *> vPButton;
   };
 
 private:
-  Gtk::Label title_;
+  int index_;
   Gtk::Picture picture_;
   std::vector<Iris::Page::Row *> vPRow_;
+  Gtk::Box box_;
 
 public:
-  Page();
+  Page(int _index);
 
   void measure_vfunc(Gtk::Orientation _orientation, int _for_size, int &_minimum, int &_natural,
                      int &_minimum_baseline, int &_natural_baseline) const override;
