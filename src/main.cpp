@@ -1,6 +1,4 @@
-#include "./ui/window.hpp"
-
-#include <gtkmm.h>
+#include "ui/window.hpp"
 
 int main(int _argc, char *_argv[])
 {
@@ -11,5 +9,6 @@ int main(int _argc, char *_argv[])
 
   Gtk::StyleContext::add_provider_for_display(Gdk::Display::get_default(), css_provider,
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
   return app->make_window_and_run<Iris::Window>(_argc, _argv);
 }

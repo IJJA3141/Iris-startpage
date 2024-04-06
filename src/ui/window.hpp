@@ -1,26 +1,34 @@
-#ifndef _IRIS_WINDOW
-#define _IRIS_WINDOW
+#pragma once
 
 #include "page.hpp"
 
+#include <gdkmm.h>
+#include <glibmm.h>
 #include <gtkmm.h>
-#include <vector>
 
 namespace Iris
 {
 class Window : public Gtk::Window
 {
 private:
-  Iris::Page pg;
   Gtk::Stack stack_;
+  std::vector<Iris::Page *> vPPage_;
+  Gtk::Label search_;
 
-  // std::vector<Iris::Page *> vPPage_;
+  bool search_is_on_;
+  int index_;
 
 public:
   Window();
 
+  bool on_key_down(guint _keyval, guint _keycode, Gdk::ModifierType _state);
   void size_allocate_vfunc(int _width, int _height, int _baseline) override;
+
+private:
+  void swap_search();
+
+private:
+  void operator++();
+  void operator--();
 };
 } // namespace Iris
-
-#endif // !_IRIS_WINDOW

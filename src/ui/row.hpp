@@ -1,27 +1,27 @@
 #pragma once
 
-#include "row.hpp"
+#include "../lua/config.hpp"
 
 #include <gtkmm.h>
+#include <vector>
 
 namespace Iris
 {
-class Page : public Gtk::Widget
+
+class Row : public Gtk::Widget
 {
 private:
   Gtk::Label title_;
-  Gtk::Picture picture_;
   Gtk::Box box_;
-  Iris::Row aRow_[3];
+  std::vector<Gtk::Button *> vPButton_;
 
 public:
-  Page();
-  Page(Iris::Config::Page const &_page);
+  Row();
+  Row(Iris::Config::Row const &_row);
 
   void measure_vfunc(Gtk::Orientation _orientation, int _for_size, int &_minimum, int &_natural,
                      int &_minimum_baseline, int &_natural_baseline) const override;
   void size_allocate_vfunc(int _width, int _height, int _baseline) override;
   Gtk::SizeRequestMode get_request_mode_vfunc() const override;
 };
-
-}; // namespace Iris
+} // namespace Iris

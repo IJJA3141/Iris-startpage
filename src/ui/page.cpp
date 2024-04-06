@@ -1,17 +1,19 @@
-#include "page.hpp"
+#include "./page.hpp"
 
-#include "../EXAMPLE_CONFIG.hpp"
-#include "gtkmm/enums.h"
+Iris::Page::Page() { return; }
 
-Iris::Page::Page() : picture_(_IRIS_EXAMPLE_CONFIG_IMAGE_PATH)
+Iris::Page::Page(Iris::Config::Page const &_page)
+    : picture_(_page.image), box_(Gtk::Orientation::VERTICAL), title_(_page.name)
 {
-  // css class asignation
-  this->picture_.set_name("pic");
+  for (int i = 0; i < 3; i++) {
+    this->aRow_[i] = Iris::Row(_page.aRow[i]);
+    this->box_.append(this->aRow_[i]);
+  }
 
-  // parenting
   this->picture_.set_parent(*this);
+  this->box_.set_parent(*this);
 
-  // settings
+  this->picture_.set_size_request(1, 1);
 
   return;
 }
@@ -28,22 +30,20 @@ void Iris::Page::measure_vfunc(Gtk::Orientation _orientation, int _for_size, int
 
 void Iris::Page::size_allocate_vfunc(int _width, int _height, int _baseline)
 {
-  Gtk::Allocation pic, search;
+  Gtk::Allocation picture, box;
 
-  pic.set_x(0);
-  pic.set_width(_IRIS_EXAMPLE_CONFIG_IMAGE_WIDTH);
+  picture.set_height(_height);
+  picture.set_width(Iris::ConfigRetriever::get_config_retriver()->config.image_width);
+  picture.set_x(0);
+  picture.set_y(0);
 
-  pic.set_y(0);
-  pic.set_height(_height);
+  box.set_height(_height);
+  box.set_width(_width - Iris::ConfigRetriever::get_config_retriver()->config.image_width);
+  box.set_x(Iris::ConfigRetriever::get_config_retriver()->config.image_width);
+  box.set_y(0);
 
-  search.set_x(_IRIS_EXAMPLE_CONFIG_IMAGE_WIDTH);
-  search.set_width(_width - _IRIS_EXAMPLE_CONFIG_IMAGE_WIDTH);
-
-  search.set_y(0);
-  search.set_height(_height);
-
-  this->picture_.size_allocate(pic, _baseline);
-  this->search_.size_allocate(search, _baseline);
+  this->picture_.size_allocate(picture, _baseline);
+  this->box_.size_allocate(box, _baseline);
 
   return;
 }
