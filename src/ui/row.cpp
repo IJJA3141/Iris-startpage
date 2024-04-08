@@ -81,10 +81,6 @@ void Iris::Row::size_allocate_vfunc(int _width, int _height, int _baseline)
   box.set_x(0);
   box.set_y(min);
 
-  std::cout << "height: " << _height << "\nwidth: "
-            << _width - Iris::ConfigRetriever::get_config_retriver()->config.image_width
-            << std::endl;
-
   this->title_.size_allocate(title, _baseline);
   this->box_.size_allocate(box, _baseline);
 

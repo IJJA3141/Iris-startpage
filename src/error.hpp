@@ -1,0 +1,7 @@
+#pragma once
+
+#define ERROR_LUA_CONFIG ""
+#define ERROR_LUA_CONFIG_TABLE(NAME) ""
+#define ERROR_LUA_CONFIG_STRING(NAME) ""
+#define ERROR_LUA_CONFIG_NUMBER(NAME) ""
+#define ERROR_LUA_CONFIG_BOOLEAN(NAME) ""

@@ -9,10 +9,14 @@ include_directories(${GTK_LAYER_SHELL_INCLUDE_DIRS})
 add_executable(
   iris.out 
   main.cpp
-  ./lua/ConfigRetriever.cpp
-  ./ui/window.cpp
-  ./ui/page.cpp
-  ./ui/row.cpp
+  app.cpp
+  xdg.cpp
+  lua/debugger.cpp
+  lua/config.cpp
+  ui/window.cpp
+  ui/search.cpp
+  ui/page.cpp
+  ui/row.cpp
 )
 
 target_link_libraries(iris.out ${LUA_LIBRARIES})

@@ -1,32 +1,19 @@
 #include "window.hpp"
-#include <iostream>
 
-#define b                                                                                          \
-  {                                                                                                \
-    0, 0, i++, "label", "/etc/iris/logo.png"                                                       \
-  }
-
-Iris::Window::Window() : search_("-----------------------------"), index_(0), search_is_on_(false)
+Iris::Window::Window() : index_(0), search_is_on_(false)
 {
-  int i = 0;
-
-  Iris::Config::Row row0{"title 0", {b, b, b, b}};
-  Iris::Config::Row row1{"title 1", {b, b, b, b}};
-  Iris::Config::Row row2{"title 2", {b, b, b, b}};
-
-  Iris::Config::Page ppage = {"name", "/home/alexe/.config/iris/test.png", {row0, row1, row2}};
-
-  this->vPPage_.push_back(new Iris::Page(ppage));
-  ppage = {"name", "/home/alexe/.config/iris/test.jpg", {row0, row1, row2}};
-  this->vPPage_.push_back(new Iris::Page(ppage));
-  ppage = {"name", "/home/alexe/.config/iris/test.gif", {row0, row1, row2}};
-  this->vPPage_.push_back(new Iris::Page(ppage));
-  this->vPPage_.push_back(new Iris::Page(ppage));
+  for (Iris::Config::Page _ : Iris::ConfigRetriever::get_config_retriver()->config.vPage)
+    this->vPPage_.push_back(new Iris::Page(_));
 
   for (int i = 0; i < this->vPPage_.size(); i++)
     this->stack_.add(*this->vPPage_[i]);
 
   this->set_title("Iris");
+
+  this->set_margin(0);
+
+  this->set_default_size(Iris::ConfigRetriever::get_config_retriver()->config.width,
+                         Iris::ConfigRetriever::get_config_retriver()->config.height);
 
   this->set_name("background");
 
@@ -36,10 +23,13 @@ Iris::Window::Window() : search_("-----------------------------"), index_(0), se
   pKeyController->signal_key_pressed().connect(sigc::mem_fun(*this, &Iris::Window::on_key_down),
                                                false);
 
+  this->search_.set_visible(false);
   this->add_controller(pKeyController);
 
-  this->set_child(this->stack_);
-  this->set_child(this->search_);
+  this->overlay_.add_overlay(this->search_);
+
+  this->overlay_.set_child(this->stack_);
+  this->set_child(this->overlay_);
 
   return;
 }
@@ -54,14 +44,7 @@ void Iris::Window::size_allocate_vfunc(int _width, int _height, int _baseline)
   alloc.set_x((_width - Iris::ConfigRetriever::get_config_retriver()->config.width) / 2);
   alloc.set_width(Iris::ConfigRetriever::get_config_retriver()->config.width);
 
-  this->stack_.size_allocate(alloc, _baseline);
-
-  alloc.set_width(((_width - Iris::ConfigRetriever::get_config_retriver()->config.width) / 2) -
-                  Iris::ConfigRetriever::get_config_retriver()->config.image_width);
-  alloc.set_x(((_width - Iris::ConfigRetriever::get_config_retriver()->config.width) / 2) +
-              Iris::ConfigRetriever::get_config_retriver()->config.image_width);
-
-  this->search_.size_allocate(alloc, _baseline);
+  this->overlay_.size_allocate(alloc, _baseline);
 
   return;
 };
