@@ -33,5 +33,14 @@ public:
                      int &_minimum_baseline, int &_natural_baseline) const override;
   void size_allocate_vfunc(int _width, int _height, int _baseline) override;
   Gtk::SizeRequestMode get_request_mode_vfunc() const override;
+
+  void grab_focus();
+
+private:
+  void handle_text();
+  bool on_key_down(guint _keyval, guint _keycode, Gdk::ModifierType _state);
+  void handle_enter();
+  void find(std::string _compared, std::string _comparing, Gtk::Label *_pLabel);
+  void cycle_entry();
 };
 } // namespace Iris

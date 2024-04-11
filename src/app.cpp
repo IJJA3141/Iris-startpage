@@ -1,4 +1,5 @@
 #include "app.hpp"
+#include "gtk4-layer-shell.h"
 
 #include <filesystem>
 
@@ -43,6 +44,7 @@ void Iris::Application::on_activate()
     gtk_layer_set_margin(this->window_->gobj(), GTK_LAYER_SHELL_EDGE_TOP, 0);
     gtk_layer_auto_exclusive_zone_enable(this->window_->gobj());
     gtk_layer_set_layer(this->window_->gobj(), GTK_LAYER_SHELL_LAYER_OVERLAY);
+    gtk_layer_set_keyboard_mode(this->window_->gobj(), GTK_LAYER_SHELL_KEYBOARD_MODE_EXCLUSIVE);
   }
 
   this->window_->present();

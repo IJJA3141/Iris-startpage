@@ -35,7 +35,7 @@ local default_config = {
 	pages = {
 		{
 			name = "exemple config",
-			image = "~/.config/iris/test.jpg",
+			image = "/home/alexe/.config/iris/test.jpg",
 			top_button = {
 				title = "a row",
 				buttons = {

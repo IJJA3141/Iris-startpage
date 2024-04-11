@@ -1,6 +1,8 @@
 #include "search.hpp"
 #include "../css.hpp"
 #include "../lua/config.hpp"
+#include "gdk/gdkkeysyms.h"
+#include <iostream>
 
 Iris::Search::Entry::Entry(Gtk::Box *_parent, std::pair<std::string, std::string> _pair)
     : name(_pair.first), command(_pair.second)
@@ -29,6 +31,16 @@ Iris::Search::Search() : box_(Gtk::Orientation::VERTICAL), index_(0), labelCount
   this->scrolledWindow_.set_child(this->box_);
 
   this->entry_.set_placeholder_text("App filter...");
+
+  this->entry_.signal_activate().connect(sigc::mem_fun(*this, &Iris::Search::handle_enter));
+  this->entry_.property_text().signal_changed().connect(
+      sigc::mem_fun(*this, &Iris::Search::handle_text));
+
+  Glib::RefPtr<Gtk::EventControllerKey> pKeyController = Gtk::EventControllerKey::create();
+  pKeyController->signal_key_pressed().connect(sigc::mem_fun(*this, &Iris::Search::on_key_down),
+                                               false);
+
+  this->entry_.add_controller(pKeyController);
 
   return;
 };
@@ -89,4 +101,132 @@ void Iris::Search::size_allocate_vfunc(int _width, int _height, int _baseline)
 Gtk::SizeRequestMode Iris::Search::get_request_mode_vfunc() const
 {
   return Gtk::SizeRequestMode::CONSTANT_SIZE;
+}
+
+void Iris::Search::find(std::string _compared, std::string _comparing, Gtk::Label *_pLable)
+{
+  int size = _compared.size();
+  std::string lowerCompared;
+  bool out = false;
+  int it = 0;
+
+  if (_compared.size() < _comparing.size()) goto end;
+  if (_comparing.size() == 0) {
+    out = true;
+    goto end;
+  }
+
+  for (const char c : _comparing)
+    lowerCompared += std::tolower(c);
+
+  _comparing = lowerCompared;
+  lowerCompared.clear();
+
+  for (const char c : _compared)
+    lowerCompared += std::tolower(c);
+
+  for (int i = 0; i < size - _comparing.size() + 1; i++) {
+    if (lowerCompared.substr(i, _comparing.size()) == _comparing) {
+
+      _compared.insert((6 + _comparing.size()) * it + i + _comparing.size(), "</b>");
+      _compared.insert((6 + _comparing.size()) * it + i, "<b>");
+      it++;
+
+      out = true;
+    };
+  }
+
+end:
+  if (out) {
+    _pLable->set_visible(true);
+    _pLable->set_markup_with_mnemonic(_compared);
+    this->labelCount_++;
+  } else
+    _pLable->set_visible(false);
+
+  return;
+}
+
+void Iris::Search::handle_text()
+{
+  this->labelCount_ = 0;
+
+  for (Iris::Search::Entry _ : this->vEntry_) {
+    _.pLabel->set_text(_.name);
+    this->find(_.name, this->entry_.get_text(), _.pLabel);
+  }
+
+  if (!this->vEntry_[this->index_].pLabel->get_visible()) {
+
+    if (this->labelCount_ == 0) return;
+    this->vEntry_[this->index_].pLabel->set_name(CSS_INACTIVE_LABEL);
+
+    while (!this->vEntry_[this->index_--].pLabel->get_visible())
+      if (this->index_ == -1) this->index_ = this->vEntry_.size() - 1;
+
+    this->vEntry_[++this->index_].pLabel->set_name(CSS_ACTIVE_LABEL);
+  }
+
+  this->adjustment_->set_value(this->adjustment_->get_page_size() * this->index_ /
+                               this->labelCount_);
+
+  if (this->labelCount_ < 10)
+    this->label_.set_text(" " + std::to_string(this->labelCount_) + "/" +
+                          std::to_string(this->vEntry_.size()));
+  else
+    this->label_.set_text(std::to_string(this->labelCount_) + "/" +
+                          std::to_string(this->vEntry_.size()));
+
+  return;
+}
+
+void Iris::Search::handle_enter()
+{
+  std::string str = this->vEntry_[this->index_].command;
+  if (str.find(" ") >= str.size()) return;
+  system((str.erase(str.find(" ")) + " &").c_str());
+  exit(0);
+
+  return;
+};
+
+bool Iris::Search::on_key_down(guint _keyval, guint _keycode, Gdk::ModifierType _state)
+{
+  if (_keyval == GDK_KEY_Escape) {
+    this->scrolledWindow_.grab_focus();
+    return true;
+  } else if (_keyval == GDK_KEY_Tab || _keyval == GDK_KEY_ISO_Left_Tab) {
+    this->cycle_entry();
+    return true;
+  }
+
+  return false;
+}
+
+void Iris::Search::cycle_entry()
+{
+  this->labelCount_ = 0;
+  for (Iris::Search::Entry _ : this->vEntry_)
+    if (_.pLabel->get_visible()) this->labelCount_++;
+
+  if (this->labelCount_ <= 1) return;
+
+  this->vEntry_[this->index_++].pLabel->set_name(CSS_INACTIVE_LABEL);
+  if (this->index_ == this->vEntry_.size()) this->index_ = 0;
+
+  while (!this->vEntry_[this->index_++].pLabel->get_visible())
+    if (this->index_ == this->vEntry_.size()) this->index_ = 0;
+
+  this->vEntry_[--this->index_].pLabel->set_name(CSS_ACTIVE_LABEL);
+
+  this->adjustment_->set_value(this->adjustment_->get_page_size() * this->index_ /
+                               this->labelCount_);
+
+  return;
+};
+
+void Iris::Search::grab_focus()
+{
+  this->entry_.grab_focus();
+  return;
 }

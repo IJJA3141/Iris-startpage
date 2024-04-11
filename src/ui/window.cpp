@@ -1,4 +1,5 @@
 #include "window.hpp"
+#include "gdk/gdkkeysyms.h"
 
 Iris::Window::Window() : index_(0), search_is_on_(false)
 {
@@ -23,8 +24,8 @@ Iris::Window::Window() : index_(0), search_is_on_(false)
   pKeyController->signal_key_pressed().connect(sigc::mem_fun(*this, &Iris::Window::on_key_down),
                                                false);
 
-  this->search_.set_visible(false);
   this->add_controller(pKeyController);
+  this->search_.set_visible(false);
 
   this->overlay_.add_overlay(this->search_);
 
@@ -53,6 +54,7 @@ void Iris::Window::swap_search()
 {
   this->search_is_on_ = !this->search_is_on_;
   this->search_.set_visible(this->search_is_on_);
+  this->search_.grab_focus();
 
   return;
 }
@@ -76,12 +78,14 @@ void Iris::Window::operator--()
 
 bool Iris::Window::on_key_down(guint _keyval, guint _keycode, Gdk::ModifierType _state)
 {
-  if (_keyval == GDK_KEY_q)
+  if (_keyval == GDK_KEY_H)
     this->operator--();
-  else if (_keyval == GDK_KEY_e)
+  else if (_keyval == GDK_KEY_L)
     this->operator++();
   else if (_keyval == GDK_KEY_i)
     this->swap_search();
+  else if (_keyval == GDK_KEY_q || _keyval == GDK_KEY_Escape)
+    exit(0);
 
   return false;
 }

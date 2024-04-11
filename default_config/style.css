@@ -1,40 +1,3 @@
-* {
-  font-size: 20px;
-  color: #ebdbb2;
-}
-
-#background {
-  background-color: transparent;
-}
-
-#active_label {
-  background-color: #665c54;
-}
-
-#inactive_label {
-  background-color: #32302f;
-}
-
-#search {
-  background-color: #1d2021;
-}
-
-#scroll:focus {
-  background-color: red;
-}
-
-#scroll {
-  background-color: green;
-}
-
-#entry {
-  background-color: #282828;
-}
-
-#entry_count {
-  background-color: #282828;
-}
-
 /*
   --bg: #282828;
   --red: #cc241d;
@@ -68,10 +31,6 @@
   --orange_l: #fe8019;
 */
 
-#pic{
+* {
   background-color: pink;
-}
-
-#test_box {
-  background-color: maroon;
 }

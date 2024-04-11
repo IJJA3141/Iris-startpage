@@ -1,3 +1,10 @@
+clean:
+	sudo rm -rf /etc/iris/
+
 install:
-	mkdir /etc/iris/
-	cp ./default_config/* /etc/iris/
+	sudo mkdir /etc/iris/
+	sudo cp ./default_config/* /etc/iris/
+
+cleaninstall:
+	make clean
+	make install

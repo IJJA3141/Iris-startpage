@@ -1,3 +1,4 @@
 #pragma once
 
-#define CSS_INACTIVE_LABEL "css>_inactive_label"
+#define CSS_INACTIVE_LABEL "css_inactive_label"
+#define CSS_ACTIVE_LABEL "css_active_label"
