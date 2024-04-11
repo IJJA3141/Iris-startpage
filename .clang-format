@@ -1,8 +1,0 @@
----
-BasedOnStyle: LLVM
-BreakBeforeBraces: Linux
-AllowShortIfStatementsOnASingleLine: true #false
-IndentCaseLabels: false
-AlignConsecutiveDeclarations: false
-ColumnLimit: 100
-...
