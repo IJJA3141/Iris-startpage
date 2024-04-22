@@ -32,11 +32,12 @@ Iris::ConfigRetriever::ConfigRetriever()
   this->debugger_.set_stack(this->L_);
   lua_getglobal(this->L_, "Config");
 
-  this->config.image_width = this->get_float("image_width");
+  this->config.imageWidth = this->get_float("image_width");
   this->config.width = this->get_float("width");
   this->config.height = this->get_float("height");
-  this->config.use_local = this->get_bool("use_local");
-  this->config.is_overlay = this->get_bool("is_overlay");
+  this->config.useLocal = this->get_bool("use_local");
+  this->config.isOverlay = this->get_bool("is_overlay");
+  this->config.entryNumber = this->get_float("entry_number");
 
   lua_pushstring(this->L_, "pages");
   lua_gettable(this->L_, 1);
@@ -173,17 +174,17 @@ void Iris::ConfigRetriever::debug_config()
 
   (str += "width: ") += std::to_string(this->config.width) += "\n";
   (str += "height: ") += std::to_string(this->config.height) += "\n";
-  (str += "image_width: ") += std::to_string(this->config.image_width) += "\n";
+  (str += "image_width: ") += std::to_string(this->config.imageWidth) += "\n";
 
   str += "use_local: ";
-  if (this->config.use_local)
+  if (this->config.useLocal)
     str += "true";
   else
     str += "false";
   str += "\n";
 
   str += "is_overlay: ";
-  if (this->config.is_overlay)
+  if (this->config.isOverlay)
     str += "true";
   else
     str += "false";

@@ -13,6 +13,8 @@ add_executable(
   xdg.cpp
   lua/config.cpp
   lua/debugger.cpp
+  ui/window.cpp
+  ui/search.cpp
 )
 
 target_link_libraries(iris ${LUA_LIBRARIES})

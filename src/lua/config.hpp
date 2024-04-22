@@ -11,10 +11,17 @@ extern "C" {
 
 namespace Iris
 {
+
+struct Entry {
+public:
+  const std::string label;
+  const std::string command;
+};
+
 namespace xdg
 {
 
-std::vector<std::pair<std::string, std::string>> fetch();
+std::vector<Iris::Entry> fetch();
 
 } // namespace xdg
 
@@ -45,9 +52,10 @@ struct Page {
 struct Config {
   int width;
   int height;
-  int image_width;
-  bool use_local;
-  bool is_overlay;
+  int imageWidth;
+  bool useLocal;
+  bool isOverlay;
+  int entryNumber;
 
   std::vector<Iris::Config::Page> vPage;
 };
