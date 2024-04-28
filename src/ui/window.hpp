@@ -1,11 +1,15 @@
 #pragma once
 
+#include "search.hpp"
 #include <gtkmm.h>
 
 namespace Iris
 {
 class Window : public Gtk::Window
 {
+private:
+  Iris::Search search_;
+
 public:
   Window();
 

@@ -3,6 +3,8 @@
 #include "../lua/config.hpp"
 
 #include <gtkmm.h>
+#include <string>
+#include <utility>
 #include <vector>
 
 namespace Iris
@@ -17,8 +19,10 @@ private:
 
   Gtk::Box entryBox_;
   std::vector<Iris::Entry> vEntry_;
-  std::vector<Iris::Entry *> pMatchingEntry_;
+  std::vector<std::pair<int, Iris::Entry *>> pMatchingEntry_;
   int index_;
+  uint entryNumber_;
+  std::vector<Gtk::Label*> vPLabel_;
 
 public:
   Search();
@@ -26,6 +30,7 @@ public:
   void size_allocate_vfunc(int _width, int _height, int _baseline) override;
 
 private:
-  void match(const std::string _in);
+  void match(const std::string _input);
+  void show_entrys();
 };
 } // namespace Iris

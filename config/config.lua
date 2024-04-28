@@ -23,6 +23,7 @@
 ---@field use_local boolean
 ---@field is_overlay boolean
 ---@field pages Array<Page>
+---@field entry_number integer
 
 ---@type Config
 local default_config = {
@@ -31,6 +32,7 @@ local default_config = {
 	height = 400,
 	use_local = true,
 	is_overlay = true,
+	entry_number = 5,
 
 	pages = {
 		{

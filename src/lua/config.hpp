@@ -14,8 +14,8 @@ namespace Iris
 
 struct Entry {
 public:
-  const std::string label;
-  const std::string command;
+  std::string label;
+  std::string command;
 };
 
 namespace xdg
