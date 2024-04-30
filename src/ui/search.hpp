@@ -12,25 +12,26 @@ namespace Iris
 class Search : public Gtk::Widget
 {
 private:
-  Gtk::Box searchBox_;
-  Gtk::Label leftLabel_;
-  Gtk::Entry entry_;
   Gtk::Label rightLabel_;
+  Gtk::Label leftLabel_;
+  Gtk::Box searchBox_;
+  Gtk::Entry entry_;
 
-  Gtk::Box entryBox_;
-  std::vector<Iris::Entry> vEntry_;
   std::vector<std::pair<int, Iris::Entry *>> pMatchingEntry_;
-  int index_;
+  std::vector<Gtk::Label *> vPLabel_;
+  std::vector<Iris::Entry> vEntry_;
+  Gtk::Box entryBox_;
   uint entryNumber_;
-  std::vector<Gtk::Label*> vPLabel_;
+  int index_;
 
 public:
   Search();
-
+  void grab_focus();
   void size_allocate_vfunc(int _width, int _height, int _baseline) override;
 
 private:
-  void match(const std::string _input);
+  bool on_key_down(guint _keyval, guint _keycode, Gdk::ModifierType _state);
+  void match();
   void show_entrys();
 };
 } // namespace Iris

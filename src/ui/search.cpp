@@ -1,9 +1,10 @@
 #include "search.hpp"
+#include "../const/css.hpp"
 #include "../const/label.hpp"
 #include "../lua/config.hpp"
-#include "gtkmm/enums.h"
-#include "gtkmm/label.h"
+
 #include <algorithm>
+#include <iostream>
 
 Iris::Search::Search()
     : index_(0), searchBox_(Gtk::Orientation::HORIZONTAL), leftLabel_(SEARCH_LEFT_LABEL),
@@ -22,12 +23,23 @@ Iris::Search::Search()
     this->vPLabel_.push_back(new Gtk::Label);
     this->entryBox_.append(*this->vPLabel_[i]);
     this->vPLabel_[i]->set_expand(true);
+    this->vPLabel_[i]->set_name(CSS_INACTIVE_LABEL);
   }
+
+  this->vPLabel_[0]->set_name(CSS_ACTIVE_LABEL);
 
   this->searchBox_.set_parent(*this);
   this->entryBox_.set_parent(*this);
 
-  this->match("");
+  Glib::RefPtr<Gtk::EventControllerKey> pKeyController = Gtk::EventControllerKey::create();
+  pKeyController->signal_key_pressed().connect(sigc::mem_fun(*this, &Iris::Search::on_key_down),
+                                               false);
+
+  this->entry_.add_controller(pKeyController);
+
+  this->entry_.property_text().signal_changed().connect(sigc::mem_fun(*this, &Iris::Search::match));
+
+  this->match();
   this->show_entrys();
 
   return;
@@ -84,9 +96,10 @@ int edit_distance(std::string _compared, std::string _comparing)
   return (int)arr[_compared.size()][_comparing.size()];
 }
 
-void Iris::Search::match(const std::string _input)
+void Iris::Search::match()
 {
-  if (_input.size() == 0) {
+
+  if (this->entry_.get_text().size() == 0) {
     for (int i = 0; i < this->vEntry_.size(); i++)
       this->pMatchingEntry_.push_back(std::pair<int, Iris::Entry *>(0, &this->vEntry_[i]));
 
@@ -98,9 +111,11 @@ void Iris::Search::match(const std::string _input)
   this->pMatchingEntry_.clear();
 
   for (int i = 0; i < this->vEntry_.size(); i++) {
-    distance = edit_distance(this->vEntry_[i].label, _input);
+    distance = edit_distance(this->vEntry_[i].label, this->entry_.get_text());
 
-    if (distance != std::max({this->vEntry_[i].label.size(), _input.size()}))
+    std::cout << this->vEntry_[i].label << " : " << distance << std::endl;
+
+    if (distance != std::max({this->vEntry_[i].label.size(), this->entry_.get_text().size()}))
       this->pMatchingEntry_.push_back(std::pair<int, Iris::Entry *>(distance, &this->vEntry_[i]));
   }
 
@@ -108,6 +123,35 @@ void Iris::Search::match(const std::string _input)
 
   return;
 };
+
+bool Iris::Search::on_key_down(guint _keyval, guint _keycode, Gdk::ModifierType _state)
+{
+  if (_keyval == GDK_KEY_Escape) {
+    this->get_parent()->grab_focus();
+    return false;
+  } else if (_keyval == GDK_KEY_Tab || _keyval == GDK_KEY_ISO_Left_Tab) {
+    this->vPLabel_[this->index_ % this->entryNumber_]->set_name(CSS_INACTIVE_LABEL);
+
+    if (_state == Gdk::ModifierType::SHIFT_MASK) {
+      if (--this->index_ >= this->pMatchingEntry_.size())
+        this->index_ = this->pMatchingEntry_.size() - 1;
+    } else if (++this->index_ >= this->pMatchingEntry_.size())
+      this->index_ = 0;
+
+    this->vPLabel_[this->index_ % this->entryNumber_]->set_name(CSS_ACTIVE_LABEL);
+    this->show_entrys();
+
+    return true;
+  }
+
+  return false;
+}
+
+void Iris::Search::grab_focus()
+{
+  this->entry_.grab_focus();
+  return;
+}
 
 void Iris::Search::show_entrys()
 {
