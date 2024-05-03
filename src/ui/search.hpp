@@ -32,5 +32,6 @@ private:
   bool on_key_down(guint _keyval, guint _keycode, Gdk::ModifierType _state);
   void match();
   void show_entrys();
+  void run();
 };
 } // namespace Iris

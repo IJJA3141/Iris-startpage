@@ -4,6 +4,7 @@
 #include "../lua/config.hpp"
 
 #include <algorithm>
+#include <cstdlib>
 #include <iostream>
 #include <utility>
 #include <vector>
@@ -36,9 +37,9 @@ Iris::Search::Search()
   Glib::RefPtr<Gtk::EventControllerKey> pKeyController = Gtk::EventControllerKey::create();
   pKeyController->signal_key_pressed().connect(sigc::mem_fun(*this, &Iris::Search::on_key_down),
                                                false);
-
   this->entry_.add_controller(pKeyController);
 
+  this->entry_.signal_activate().connect(sigc::mem_fun(*this, &Iris::Search::run));
   this->entry_.property_text().signal_changed().connect(sigc::mem_fun(*this, &Iris::Search::match));
 
   this->match();
@@ -78,7 +79,9 @@ bool Iris::Search::on_key_down(guint _keyval, guint _keycode, Gdk::ModifierType 
   if (_keyval == GDK_KEY_Escape) {
     this->get_parent()->grab_focus();
     return false;
-  } else if (_keyval == GDK_KEY_Tab || _keyval == GDK_KEY_ISO_Left_Tab) {
+  }
+
+  if (_keyval == GDK_KEY_Tab || _keyval == GDK_KEY_ISO_Left_Tab) {
     this->vPLabel_[this->index_ % this->entryNumber_]->set_name(CSS_INACTIVE_LABEL);
 
     if (_state == Gdk::ModifierType::SHIFT_MASK) {
@@ -174,10 +177,7 @@ void Iris::Search::match()
       entry = this->vEntry_[i];
       match = common(entry.label, this->entry_.get_text());
 
-      if (match != 0) {
-        std::cout << match << std::endl;
-        this->pMatchingEntry_.push_back(std::pair<int, Iris::Entry>(match, entry));
-      }
+      if (match != 0) this->pMatchingEntry_.push_back(std::pair<int, Iris::Entry>(match, entry));
     }
   }
 
@@ -191,6 +191,17 @@ void Iris::Search::match()
 
   this->rightLabel_.set_text(std::to_string(this->pMatchingEntry_.size()) + "/" +
                              std::to_string(this->vEntry_.size()));
+
+  return;
+}
+
+void Iris::Search::run()
+{
+  if (this->pMatchingEntry_.size() <= this->index_) return;
+
+  std::string str = this->pMatchingEntry_[this->index_].second.command;
+  system((str.erase(str.find(" ")) + " &").c_str());
+  exit(0);
 
   return;
 }
