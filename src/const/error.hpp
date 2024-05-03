@@ -8,3 +8,6 @@
 #define ERROR_LUA_CONFIG_BOOLEAN(NAME) "[LUA CONFIG] " + NAME + " should be a boolean"
 #define ERROR_LUA_CONFIG_STRING(NAME) "[LUA CONFIG] " + NAME + " should be a string"
 #define ERROR_LUA_CONFIG_NUMBER(NAME) "[LUA CONFIG] " + NAME + " should be a number"
+
+// run logs/error
+#define LOG_RUN(COMMAND) "RUN: " + COMMAND + " has been called"

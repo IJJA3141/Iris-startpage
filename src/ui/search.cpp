@@ -1,5 +1,6 @@
 #include "search.hpp"
 #include "../const/css.hpp"
+#include "../const/error.hpp"
 #include "../const/label.hpp"
 #include "../lua/config.hpp"
 
@@ -200,7 +201,11 @@ void Iris::Search::run()
   if (this->pMatchingEntry_.size() <= this->index_) return;
 
   std::string str = this->pMatchingEntry_[this->index_].second.command;
-  system((str.erase(str.find(" ")) + " &").c_str());
+  if (!(str.find(" ") >= str.size())) str = str.erase(str.find(" "));
+
+  system((str + " &").c_str());
+  std::cout << LOG_RUN(str + " &") << std::endl;
+
   exit(0);
 
   return;
