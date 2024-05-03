@@ -5,6 +5,8 @@
 
 #include <algorithm>
 #include <iostream>
+#include <utility>
+#include <vector>
 
 Iris::Search::Search()
     : index_(0), searchBox_(Gtk::Orientation::HORIZONTAL), leftLabel_(SEARCH_LEFT_LABEL),
@@ -71,59 +73,6 @@ void Iris::Search::size_allocate_vfunc(int _width, int _height, int _baseline)
   return;
 }
 
-bool comaperEntry(std::pair<int, Iris::Entry *> &_, std::pair<int, Iris::Entry *> &__)
-{
-  return (_.first < __.first);
-}
-
-int edit_distance(std::string _compared, std::string _comparing)
-{
-  uint16_t arr[_compared.size() + 1][_comparing.size() + 1];
-
-  for (uint16_t i = 0; i <= _compared.size(); i++)
-    arr[i][0] = i;
-  for (uint16_t i = 0; i <= _comparing.size(); i++)
-    arr[0][i] = i;
-
-  for (uint16_t i = 1; i <= _compared.size(); i++)
-    for (uint16_t j = 1; j <= _comparing.size(); j++) {
-      if (_compared[i - 1] == _comparing[j - 1])
-        arr[i][j] = arr[i - 1][j - 1];
-      else
-        arr[i][j] = std::min({arr[i - 1][j - 1], arr[i][j - 1], arr[i - 1][j]}) + 1;
-    }
-
-  return (int)arr[_compared.size()][_comparing.size()];
-}
-
-void Iris::Search::match()
-{
-
-  if (this->entry_.get_text().size() == 0) {
-    for (int i = 0; i < this->vEntry_.size(); i++)
-      this->pMatchingEntry_.push_back(std::pair<int, Iris::Entry *>(0, &this->vEntry_[i]));
-
-    return;
-  }
-
-  int distance;
-
-  this->pMatchingEntry_.clear();
-
-  for (int i = 0; i < this->vEntry_.size(); i++) {
-    distance = edit_distance(this->vEntry_[i].label, this->entry_.get_text());
-
-    std::cout << this->vEntry_[i].label << " : " << distance << std::endl;
-
-    if (distance != std::max({this->vEntry_[i].label.size(), this->entry_.get_text().size()}))
-      this->pMatchingEntry_.push_back(std::pair<int, Iris::Entry *>(distance, &this->vEntry_[i]));
-  }
-
-  std::sort(this->pMatchingEntry_.begin(), this->pMatchingEntry_.end(), comaperEntry);
-
-  return;
-};
-
 bool Iris::Search::on_key_down(guint _keyval, guint _keycode, Gdk::ModifierType _state)
 {
   if (_keyval == GDK_KEY_Escape) {
@@ -139,6 +88,7 @@ bool Iris::Search::on_key_down(guint _keyval, guint _keycode, Gdk::ModifierType 
       this->index_ = 0;
 
     this->vPLabel_[this->index_ % this->entryNumber_]->set_name(CSS_ACTIVE_LABEL);
+
     this->show_entrys();
 
     return true;
@@ -157,12 +107,90 @@ void Iris::Search::show_entrys()
 {
   int indexFirst = this->index_ / this->entryNumber_;
 
+  for (Gtk::Label *_ : this->vPLabel_) {
+    _->set_text("");
+  }
+
   for (int i = 0; i < this->entryNumber_; i++) {
     if (i + indexFirst * this->entryNumber_ >= this->pMatchingEntry_.size()) break;
 
-    this->vPLabel_[i]->set_text(
-        this->pMatchingEntry_[i + indexFirst * this->entryNumber_].second->label);
+    this->vPLabel_[i]->set_markup_with_mnemonic(
+        this->pMatchingEntry_[i + indexFirst * this->entryNumber_].second.label);
   }
+
+  return;
+}
+
+std::string to_lower(std::string _str)
+{
+  std::string str;
+
+  for (int i = 0; i < _str.size(); i++) {
+    if (65 <= (int)_str[i] && (int)_str[i] <= 90)
+      str += _str[i] + 32;
+    else
+      str += _str[i];
+  }
+
+  return str;
+}
+
+int common(std::string &_compared, std::string _comparing)
+{
+  int it = 0;
+
+  std::string lower_conapred = to_lower(_compared);
+  _comparing = to_lower(_comparing);
+
+  for (int i = 0; i < lower_conapred.size() - 1; i++) {
+    if (lower_conapred.substr(i, _comparing.size()) == _comparing) {
+      _compared.insert((6 + _comparing.size()) * it + i + _comparing.size(), "</b>");
+      _compared.insert((6 + _comparing.size()) * it++ + i, "<b>");
+    }
+  }
+
+  return it;
+}
+
+bool sort(std::pair<int, Iris::Entry> &_a, std::pair<int, Iris::Entry> &_b)
+{
+  return _a.first > _b.first;
+}
+
+void Iris::Search::match()
+{
+  pMatchingEntry_.clear();
+  this->vPLabel_[this->index_ % this->entryNumber_]->set_name(CSS_INACTIVE_LABEL);
+
+  if (this->entry_.get_text() == "") {
+    for (int i = 0; i < this->vEntry_.size(); i++)
+      this->pMatchingEntry_.push_back(std::pair<int, Iris::Entry>(0, this->vEntry_[i]));
+
+  } else {
+    Iris::Entry entry;
+    int match = 0;
+
+    for (int i = 0; i < this->vEntry_.size(); i++) {
+      entry = this->vEntry_[i];
+      match = common(entry.label, this->entry_.get_text());
+
+      if (match != 0) {
+        std::cout << match << std::endl;
+        this->pMatchingEntry_.push_back(std::pair<int, Iris::Entry>(match, entry));
+      }
+    }
+  }
+
+  std::sort(this->pMatchingEntry_.begin(), this->pMatchingEntry_.end(), sort);
+
+  if (this->index_ >= this->pMatchingEntry_.size()) this->index_ = this->pMatchingEntry_.size() - 1;
+  if (this->pMatchingEntry_.size() != 0)
+    this->vPLabel_[this->index_ % this->entryNumber_]->set_name(CSS_ACTIVE_LABEL);
+
+  this->show_entrys();
+
+  this->rightLabel_.set_text(std::to_string(this->pMatchingEntry_.size()) + "/" +
+                             std::to_string(this->vEntry_.size()));
 
   return;
 }

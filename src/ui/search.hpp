@@ -3,7 +3,6 @@
 #include "../lua/config.hpp"
 
 #include <gtkmm.h>
-#include <string>
 #include <utility>
 #include <vector>
 
@@ -17,7 +16,7 @@ private:
   Gtk::Box searchBox_;
   Gtk::Entry entry_;
 
-  std::vector<std::pair<int, Iris::Entry *>> pMatchingEntry_;
+  std::vector<std::pair<int, Iris::Entry>> pMatchingEntry_;
   std::vector<Gtk::Label *> vPLabel_;
   std::vector<Iris::Entry> vEntry_;
   Gtk::Box entryBox_;
