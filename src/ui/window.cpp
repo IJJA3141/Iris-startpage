@@ -6,8 +6,11 @@
 
 Iris::Window::Window() : search_()
 {
-  this->set_title("Iris");
+  // css
   this->set_name(CSS_WINDOW);
+  this->search_.set_name(CSS_SEARCH);
+
+  this->set_title("Iris");
   this->set_default_size(Iris::ConfigRetriever::get_config_retriver()->config.width,
                          Iris::ConfigRetriever::get_config_retriver()->config.height);
 

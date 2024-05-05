@@ -16,10 +16,17 @@ Iris::Search::Search()
       entryNumber_(Iris::ConfigRetriever::get_config_retriver()->config.entryNumber),
       entryBox_(Gtk::Orientation::VERTICAL)
 {
-  this->rightLabel_.set_text("0/" + std::to_string(this->vEntry_.size()));
+  // css
+  this->searchBox_.set_name(CSS_SEARCH_BOX);
+  this->entryBox_.set_name(CSS_ENTRY_BOX);
+  this->leftLabel_.set_name(CSS_LEFT_LABEL);
+  this->rightLabel_.set_name(CSS_RIGHT_LABEL);
 
-  this->searchBox_.append(this->entry_);
+  this->rightLabel_.set_text("0" SEARCH_RIGHT_LABEL + std::to_string(this->vEntry_.size()));
+  this->entry_.set_placeholder_text(SEARCH_PLACE_HOLDER);
+
   this->searchBox_.append(this->leftLabel_);
+  this->searchBox_.append(this->entry_);
   this->searchBox_.append(this->rightLabel_);
   this->entry_.set_expand(true);
 
@@ -56,7 +63,7 @@ void Iris::Search::size_allocate_vfunc(int _width, int _height, int _baseline)
 
   int minimum, natural, minimumBaseline, naturalBaseline;
 
-  this->searchBox_.measure(Gtk::Orientation::HORIZONTAL, _width, minimum, natural, minimumBaseline,
+  this->searchBox_.measure(Gtk::Orientation::VERTICAL, _width, minimum, natural, minimumBaseline,
                            naturalBaseline);
 
   searchBox.set_x(0);
@@ -190,7 +197,7 @@ void Iris::Search::match()
 
   this->show_entrys();
 
-  this->rightLabel_.set_text(std::to_string(this->pMatchingEntry_.size()) + "/" +
+  this->rightLabel_.set_text(std::to_string(this->pMatchingEntry_.size()) + SEARCH_RIGHT_LABEL +
                              std::to_string(this->vEntry_.size()));
 
   return;
