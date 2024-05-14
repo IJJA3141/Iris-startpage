@@ -1,5 +1,6 @@
 #pragma once
 
+#include "page.hpp"
 #include "search.hpp"
 #include <gtkmm.h>
 
@@ -9,6 +10,7 @@ class Window : public Gtk::Window
 {
 private:
   Iris::Search search_;
+  Iris::Page page_;
 
 public:
   Window();

@@ -2,9 +2,11 @@
 #include "../const/css.hpp"
 #include "../lua/config.hpp"
 #include "gtkmm/widget.h"
+#include "page.hpp"
 #include "search.hpp"
 
-Iris::Window::Window() : search_()
+Iris::Window::Window()
+    : search_(), page_(Iris::ConfigRetriever::get_config_retriver()->config.vPage[0])
 {
   // css
   this->set_name(CSS_WINDOW);
@@ -19,7 +21,7 @@ Iris::Window::Window() : search_()
                                                false);
   this->add_controller(pKeyController);
 
-  this->set_child(this->search_);
+  this->set_child(this->page_);
 
   return;
 }
@@ -34,6 +36,7 @@ void Iris::Window::size_allocate_vfunc(int _width, int _height, int _baseline)
   search.set_height(_height);
 
   this->search_.size_allocate(search, _baseline);
+  this->page_.size_allocate(search, _baseline);
 
   return;
 };

@@ -11,3 +11,6 @@
 #define CSS_ENTRY_BOX "entrys_box"
 #define CSS_ACTIVE_LABEL "active_label"
 #define CSS_INACTIVE_LABEL "inactive_label"
+
+// Page
+#define CSS_PAGE_ROW "row"

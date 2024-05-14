@@ -15,6 +15,7 @@ add_executable(
   lua/debugger.cpp
   ui/window.cpp
   ui/search.cpp
+  ui/page.cpp
 )
 
 target_link_libraries(iris ${LUA_LIBRARIES})
