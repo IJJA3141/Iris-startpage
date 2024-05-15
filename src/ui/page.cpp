@@ -1,5 +1,6 @@
 #include "page.hpp"
 #include "../const/css.hpp"
+#include <iostream>
 
 Iris::Page::Page(const Iris::Config::Page &_page)
     : title_(_page.name), box_(Gtk::Orientation::VERTICAL)
@@ -44,13 +45,13 @@ Iris::Row::Row(const Iris::Config::Row &_row)
     : title_(_row.title, Gtk::Align::START), box_(Gtk::Orientation::HORIZONTAL)
 {
   Gtk::Button *pButton;
-
+  std::cout << _row.vButton.size() << std::endl;
   for (int i = 0; i < _row.vButton.size(); i++) {
-    pButton = new Gtk::Button(_row.vButton[i].label);
-
     if (_row.vButton[i].image == "") {
+      std::cout << "new button without imge" << std::endl;
       pButton = new Gtk::Button(_row.vButton[i].label);
     } else {
+      std::cout << "new button with imge" << std::endl;
       pButton = new Gtk::Button();
       Gtk::Box *pBox = new Gtk::Box(Gtk::Orientation::HORIZONTAL);
       pBox->append(*(new Gtk::Picture(_row.vButton[i].image)));
@@ -64,8 +65,8 @@ Iris::Row::Row(const Iris::Config::Row &_row)
       return;
     });
 
-    this->box_.append(*pButton);
     this->vPButton_.push_back(pButton);
+    this->box_.append(*pButton);
   }
 
   this->title_.set_parent(*this);
